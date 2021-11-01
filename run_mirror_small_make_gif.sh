@@ -1,0 +1,3 @@
+#!/bin/bash
+
+convert -delay 40 -loop 0 proj_sphere_calib_m9.gif proj_sphere_calib_m8.gif proj_sphere_calib_m7.gif proj_sphere_calib_m6.gif proj_sphere_calib_m5.gif proj_sphere_calib_m4.gif proj_sphere_calib_m3.gif proj_sphere_calib_m2.gif proj_sphere_calib_m1.gif proj_sphere_calib_m0.gif proj_sphere_calib_p1.gif proj_sphere_calib_p2.gif proj_sphere_calib_p3.gif proj_sphere_calib_p4.gif proj_sphere_calib_p5.gif proj_sphere_calib_p6.gif proj_sphere_calib_p7.gif proj_sphere_calib_p8.gif proj_sphere_calib_p9.gif proj_sphere_calib.gif

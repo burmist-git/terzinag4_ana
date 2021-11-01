@@ -1,0 +1,43 @@
+ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
+ROOTLIBS      = $(shell $(ROOTSYS)/bin/root-config --libs)
+ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
+
+CXX  = g++
+CXX += -I./	
+CXX += -I./obj/
+
+CXXFLAGS  = -g -Wall -fPIC -Wno-deprecated
+CXXFLAGS += $(ROOTCFLAGS)
+
+OUTLIB = ./obj/
+
+#----------------------------------------------------#
+
+all: runterzina	plots_SiPM_array
+
+.PHONY: printmakehelp_and_reminder
+printmakehelp_and_reminder: plots_effective_area.C Makefileterzina
+	$(info  /******************************************************************************/)
+	$(info  * task --> printmakehelp_and_reminder: plots_effective_area.C Makefileterzina *)
+	$(info  * $$@ ----> $@                                         *)
+	$(info  * $$< --------------------------------> $<                 *)
+	$(info  * $$^ --------------------------------> $^ *)
+	$(info  /******************************************************************************/)
+
+plots_SiPM_array: plots_SiPM_array.C
+	$(CXX) -DPLOTS_SIPM_ARRAY -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
+runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o
+	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
+obj/terzina.o: src/terzina.cpp src/terzina.hh obj/terzinabase.o
+	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzina.o $<
+
+obj/terzinabase.o: src/terzinabase.cpp src/terzinabase.hh
+	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzinabase.o $<
+
+clean:
+	rm -f runterzina
+	rm -f *~
+	rm -f src/*~
+	rm -f $(OUTLIB)*.o

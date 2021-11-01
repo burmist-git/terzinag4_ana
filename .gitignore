@@ -1,0 +1,10 @@
+*~
+*.pdf
+*.eps
+obj
+data
+hist
+*.root
+runterzina
+plots_SiPM_array
+plots_SiPM_array.C.tmp

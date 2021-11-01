@@ -1,0 +1,25 @@
+time
+1.0 - 1.2 not Ok
+1.2 - 1.8 not OK
+
+2.8 - 3.1 normal conditions
+
+3.1 - 3.3 double reflections
+4.7 - 4.9 double reflections
+
+5.0 - 5.1 double reflections
+
+path
+-0.1 - 0.1
+200 - 400
+400 - 800
+800 - 1000
+1000 - 1300
+1300 - 1600
+
+
+
+time
+1 - 1.4
+2.8 - 3.2 normal 
+4.7 - 4.8 double
