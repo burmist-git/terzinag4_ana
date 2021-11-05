@@ -46,9 +46,14 @@ void terzina::Loop(TString histOut){
   TH1D *h1_primPosX = new TH1D("h1_primPosX","primPosX",1000,-400,400);
   TH1D *h1_primPosY = new TH1D("h1_primPosY","primPosY",100,-400,400);
   TH1D *h1_primPosZ = new TH1D("h1_primPosZ","primPosZ",100,-400,400);
+  //
+  TH1D *h1_primMomX = new TH1D("h1_primMomX","h1_primMomX",1000,-5.5*1.0e-6,5.5*1.0e-6);
+  TH1D *h1_primMomY = new TH1D("h1_primMomY","h1_primMomY",1000,-5.5*1.0e-6,5.5*1.0e-6);
+  TH1D *h1_primMomZ = new TH1D("h1_primMomZ","h1_primMomZ",1000,-5.5*1.0e-6,5.5*1.0e-6);
+  //
   TH2D *h2_primPosY_vs_primPosX = new TH2D("h2_primPosY_vs_primPosX","primPosY vs primPosX",400,-400,400,400,-400,400);
   TH1D *h1_thetaPhotons = new TH1D("h1_thetaPhotons","thetaPhotons",1000,-2*TMath::Pi(),2*TMath::Pi());
-  TH1D *h1_thetaPhotons_deg = new TH1D("h1_thetaPhotons_deg","thetaPhotons deg",400,-1,10);
+  TH1D *h1_thetaPhotons_deg = new TH1D("h1_thetaPhotons_deg","thetaPhotons deg",400,-10,10);
   //TH1D *h1_thetaPhotons_deg = new TH1D("h1_thetaPhotons_deg","thetaPhotons deg",4000,-360,360);
   TH1D *h1_phiPhotons = new TH1D("h1_phiPhotons","phiPhotons",1000,-2*TMath::Pi(),2*TMath::Pi());
   TH1D *h1_phiPhotons_deg = new TH1D("h1_phiPhotons_deg","phiPhotons deg",4000,-360,360);
@@ -94,6 +99,8 @@ void terzina::Loop(TString histOut){
     posR  = TMath::Sqrt(PosX[i]*PosX[i]+PosY[i]*PosY[i]);
     //
     thetaPhotons = TMath::ACos(primMomZ/TMath::Sqrt(primMomX*primMomX + primMomY*primMomY + primMomZ*primMomZ));
+    if(primMomX<0)
+      thetaPhotons = -thetaPhotons;
     thetaPhotons_deg = thetaPhotons*180/TMath::Pi();
     //
     if(primMomX == 0.0 && thetaPhotons != 0.0)
@@ -114,13 +121,18 @@ void terzina::Loop(TString histOut){
 	z0_reco = -999.0;
       h1_proj_sphere_R_delta_R_2->Fill(proj_sphere_R_delta_R_2);
       h1_z0_reco->Fill(z0_reco);
-      if(TMath::Abs(z0_reco + 63)<0.00001){
-	//if(Time[i]>=2.8 && Time[i]<=3.2){
-	if(Time[i]>=4.7 && Time[i]<=4.8){
+      if(TMath::Abs(z0_reco + 63)<0.00001 && TMath::Abs(primPosX)>95.0){
+	if(Time[i]>=2.8 && Time[i]<=3.2){
+	  //if(Time[i]>=4.7 && Time[i]<=4.8){
 	  //
 	  h1_primPosX->Fill(primPosX);
 	  h1_primPosY->Fill(primPosY);
 	  h1_primPosZ->Fill(primPosZ);
+	  //
+	  h1_primMomX->Fill(primMomX);
+	  h1_primMomY->Fill(primMomY);
+	  h1_primMomZ->Fill(primMomZ);
+	  //
 	  h2_primPosY_vs_primPosX->Fill(primPosX,primPosY);
 	  h1_thetaPhotons->Fill(thetaPhotons);
 	  h1_thetaPhotons_deg->Fill(thetaPhotons_deg);
@@ -151,7 +163,7 @@ void terzina::Loop(TString histOut){
 	  h2_thetaPhotons_deg_vs_primPosX->Fill(primPosX,thetaPhotons_deg);
 	  pr_thetaPhotons_deg_vs_primPosX->Fill(primPosX,thetaPhotons_deg);
 	  //
-	  if(posR<3 && thetaPhotons_deg>-4 && thetaPhotons_deg<4){
+	  if(TMath::Abs(PosX[i])<1){
 	    h2_thetaPhotons_deg_vs_primPosX_cut->Fill(primPosX,thetaPhotons_deg);
 	    pr_thetaPhotons_deg_vs_primPosX_cut->Fill(primPosX,thetaPhotons_deg);
 	    h1_PosX_cut->Fill(PosX[i]);
@@ -172,6 +184,11 @@ void terzina::Loop(TString histOut){
   h1_primPosX->Write();
   h1_primPosY->Write();
   h1_primPosZ->Write();
+  //
+  h1_primMomX->Write();
+  h1_primMomY->Write();
+  h1_primMomZ->Write();
+  //
   h2_primPosY_vs_primPosX->Write();
   h1_thetaPhotons->Write();
   h1_thetaPhotons_deg->Write();
