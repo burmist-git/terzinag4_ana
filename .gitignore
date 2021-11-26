@@ -8,3 +8,7 @@ hist
 runterzina
 plots_SiPM_array
 plots_SiPM_array.C.tmp
+tvector2_2circles_C.d
+tvector2_2circles_C.so
+tvector2_2circles_C_ACLiC_dict_rdict.pcm
+fig_gif/

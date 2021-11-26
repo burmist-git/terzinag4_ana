@@ -31,14 +31,30 @@ outHistF="./hist/hist_terzina_1.0e7.root"
 #inRootFiles="./data/terzina.root"
 #outHistSingleF="./hist/hist_terzina.root"
 #
-inRootFiles="./data/terzina_1.0e7.root"
-outHistSingleF="./hist/hist_terzina_1.0e7.root"
+#inRootFiles="./data/terzina_1.0e7.root"
+#outHistSingleF="./hist/hist_terzina_1.0e7.root"
 #
 #inRootFiles="./data/terzina_PSF_v01.00.00.root"
 #outHistSingleF="./hist/hist_terzina_PSF_v01.00.00.root"
 
 #inRootFiles="./data/terzina_PSF_v01.00.00_0theta_0phi.root";
 #outHistSingleF="./hist/hist_terzina_PSF_v01.00.00_0theta_0phi.root";
+
+#inRootFiles="./data/terzina_sipm.root"
+#outHistSingleF="./hist/hist_terzina_sipm.root"
+
+#inRootFiles="./data_v02.00.00b/terzina.root"
+#outHistSingleF="./hist_v02.00.00b/hist_terzina.root"
+
+#inRootFiles="./data_v02.00.00b/terzina_1e7.0.root"
+#outHistSingleF="./hist_v02.00.00b/hist_terzina_1e7.0.root"
+
+#inRootFiles="./data_v02.00.00b/terzina_theta_1deg.root"
+#outHistSingleF="./hist_v02.00.00b/hist_terzina_theta_1deg.root"
+#inRootFiles="./data_v02.00.00b/terzina_theta_2deg.root"
+#outHistSingleF="./hist_v02.00.00b/hist_terzina_theta_2deg.root"
+inRootFiles="./data_v02.00.00b/terzina_theta_3deg.root"
+outHistSingleF="./hist_v02.00.00b/hist_terzina_theta_3deg.root"
 
 make -f Makefileterzina clean; make -f Makefileterzina runterzina;
 

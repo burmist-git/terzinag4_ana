@@ -14,7 +14,9 @@ using namespace std;
 Int_t plots_reflections(){
 
   TString fileN;
-  fileN = "./hist/hist_terzina_1.0e7.root";
+  //fileN = "./hist_v02.00.00b/hist_terzina.root";
+  fileN = "./hist_v02.00.00b/hist_terzina_1e7.0.root";
+  //fileN = "./hist/hist_terzina_1.0e7.root";
   //fileN = "./hist/hist_terzina.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00.root";
 

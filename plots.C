@@ -23,12 +23,17 @@ Int_t plots(){
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_2theta_0phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_0phi.root";
 
-  fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_20phi.root";
+  //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_20phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_45phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_90phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_135phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_180phi.root";
-  
+
+  //fileN = "./hist_v02.00.00b/hist_terzina.root";
+  //fileN = "./hist_v02.00.00b/hist_terzina_theta_1deg.root";
+  //fileN = "./hist_v02.00.00b/hist_terzina_theta_2deg.root";
+  fileN = "./hist_v02.00.00b/hist_terzina_theta_3deg.root";
+
   TFile *f1 = new TFile(fileN.Data());
 
   TH2D *h2_1 = (TH2D*)f1->Get("h2_primPosY_vs_primPosX");
@@ -37,6 +42,7 @@ Int_t plots(){
   TH1D *h1_4 = (TH1D*)f1->Get("h1_PosX");
   TH1D *h1_5 = (TH1D*)f1->Get("h1_PosY");
   TH2D *h2_6 = (TH2D*)f1->Get("h2_PosY_vs_PosX");
+  //TH2D *h2_6 = (TH2D*)f1->Get("h2_PosY_vs_PosX_single");
     
   //TH1D *h1_1 = (TH1D*)f1->Get("h1_Time");
   //TH1D *h1_1 = (TH1D*)f1->Get("h1_PosX");
