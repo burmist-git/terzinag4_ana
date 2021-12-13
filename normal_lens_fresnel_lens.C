@@ -37,6 +37,8 @@ struct lens_tangent_info_str {
   }   
 };
 
+TString file_info_fresnel_lens_shape;
+
 void get_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t lens_n, Double_t lens_f, Int_t n);
 void get_fresnel_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t lens_n, Double_t lens_f, Int_t n);
 Bool_t get_lens_tangent(Double_t R, Double_t f, Double_t n, lens_tangent_info_str *lens_tangent_info);
@@ -45,7 +47,7 @@ Int_t normal_lens_fresnel_lens(){
   //
   ////////////////////////////////////////////////
   Double_t lens_n = 1.47;
-  Double_t lens_f = 800.0; // mm
+  Double_t lens_f = 400.0; // mm
   Double_t lens_R = 300.0; // mm
   Int_t nn = 25;
   ///////////////////////////////////////////////
@@ -64,6 +66,7 @@ Int_t normal_lens_fresnel_lens(){
   //
   TGraph *gr_lens_shape = new TGraph();
   //get_lens_shape(gr_lens_shape, lens_R, lens_n, lens_f, nn);
+  file_info_fresnel_lens_shape = "./fresnel_lens_shape_R300_f400_n25.dat";
   get_fresnel_lens_shape(gr_lens_shape, lens_R, lens_n, lens_f, nn);
   //
   TCanvas *c1 = new TCanvas("c1","c2",10,10,800,800);
@@ -92,7 +95,7 @@ Int_t normal_lens_fresnel_lens(){
   //gr_lens_shape->GetYaxis()->SetTitle("thickness, mm");
   //
   TGraph *gr_support = new TGraph();
-  gr_support->SetPoint(gr_support->GetN(),0.0,lens_f/2.0);
+  gr_support->SetPoint(gr_support->GetN(),0.0,lens_f);
   gr_support->SetMarkerStyle(20);
   gr_support->SetLineColor(kRed);
   gr_support->SetMarkerColor(kRed);
@@ -166,6 +169,14 @@ void get_fresnel_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t len
   Int_t nii = 100;
   //
   vector<lens_tangent_info_str*> v_lens_tangent_info_str;
+  cout<<"file_info_fresnel_lens_shape = "<<file_info_fresnel_lens_shape<<endl;
+  FILE *fp01;
+  fp01 = fopen(file_info_fresnel_lens_shape.Data(), "w+");
+  fprintf(fp01, "lens_R = %10.5f \n",lens_R);
+  fprintf(fp01, "lens_n = %10.5f \n",lens_n);
+  fprintf(fp01, "lens_f = %10.5f \n",lens_f);
+  fprintf(fp01, "n      = %10d \n",n);
+  fprintf(fp01, "substr = %10.5f \n",lens_substrate_thickness);
   //
   for(Int_t i = 0; i<n; i++){
     R = Rmax - dR*i;
@@ -180,6 +191,7 @@ void get_fresnel_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t len
 	y2 = R-dR;
 	k = (y2 - y1)/(x2-x1);
 	b = y1 - k*x1;
+	fprintf(fp01, "%10d %10.5f %10.5f %10.5f %10.5f \n",i,x1,y1,x2,y2);
 	//
 	for(Int_t ii = 0;ii<nii;ii++){
 	  x = (x2 - x1)/(nii-1)*ii+x1;
@@ -220,6 +232,7 @@ void get_fresnel_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t len
     else
       lens_tangent_info->tang_is_ok = false;
   }
+  fclose(fp01);
   //for(unsigned int i = 0;i<v_lens_tangent_info_str.size();i++){
   //v_lens_tangent_info_str.at(i)->print_info();
   //}
