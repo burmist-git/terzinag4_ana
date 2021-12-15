@@ -67,7 +67,7 @@ void terzina::Loop(TString histOut){
   TH1D *h1_posR = new TH1D("h1_posR","posR",1000,0,100);
   //
   TH1D *h1_Energy = new TH1D("h1_Energy","Energy",100,0.0,6*1.0e-6);
-  TH1D *h1_Wavelength = new TH1D("h1_Wavelength","Wavelength",100,200,1400);
+  TH1D *h1_Wavelength = new TH1D("h1_Wavelength","Wavelength",100,200,1100);
   TH1D *h1_Time = new TH1D("h1_Time","Time",10000,0,10);
   TH1D *h1_Time_nocut = new TH1D("h1_Time_nocut","Time nocut",10000,0,10);
   TH1D *h1_photPathLen = new TH1D("h1_photPathLen","photPathLen",10000,0,5000); 
@@ -84,7 +84,7 @@ void terzina::Loop(TString histOut){
   TH1D *h1_MomY = new TH1D("h1_MomY","MomY",1000,-6*1.0e-6,6*1.0e-6);
   TH1D *h1_MomZ = new TH1D("h1_MomZ","MomZ",1000,-6*1.0e-6,6*1.0e-6);
   //
-  TH2D *h2_PosX_vs_primPosX = new TH2D("h2_PosX_vs_primPosX","PosX vs primPosX",400,-400,400,400,-400,400);
+  TH2D *h2_PosX_vs_primPosX = new TH2D("h2_PosX_vs_primPosX","PosX vs primPosX",400,-400,400,4000,-120,120);
   TProfile *pr_PosX_vs_primPosX = new TProfile("pr_PosX_vs_primPosX","PosX vs primPosX",400,-400,400,"");
   TH2D *h2_thetaPhotons_deg_vs_primPosX = new TH2D("h2_thetaPhotons_deg_vs_primPosX","thetaPhotons deg vs primPosX",400,-400,400,400,-10,10);
   TProfile *pr_thetaPhotons_deg_vs_primPosX = new TProfile("pr_thetaPhotons_deg_vs_primPosX","thetaPhotons deg vs primPosX",400,-400,400,"");
@@ -97,7 +97,7 @@ void terzina::Loop(TString histOut){
   TH1D *h1_proj_sphere_R_delta_R_2 = new TH1D("h1_proj_sphere_R_delta_R_2","proj_sphere_R_delta_R_2",1000,-100000,100000);
   TH1D *h1_z0_reco = new TH1D("h1_z0_reco","z0_reco",4000,-100,-50);
   //
-  TH1D *h1_R_PSF = new TH1D("h1_R_PSF","R PSF",400,0.0,10.0);
+  TH1D *h1_R_PSF = new TH1D("h1_R_PSF","R PSF",800,0.0,20.0);
   //
   Double_t xMaxCenter;
   Double_t yMaxCenter;	  
@@ -144,8 +144,8 @@ void terzina::Loop(TString histOut){
       h1_z0_reco->Fill(z0_reco);
       //if(TMath::Abs(z0_reco + 63)<0.00001 && TMath::Abs(primPosX)>95.0){
       //if(TMath::Abs(z0_reco + 63)<1000000 && TMath::Abs(primPosX)>-10000000){
-      //if(Time[i]>=0 && Time[i]<=10000){
-      if(Time[i]>=2.7 && Time[i]<=3.2){
+      if(Time[i]>=0 && Time[i]<=10000){
+	//if(Time[i]>=2.7 && Time[i]<=3.2){
 	//if(Wavelength[i]>=290.0 && Wavelength[i]<=310.0){
 	//if(Wavelength[i]>=390.0 && Wavelength[i]<=410.0){
 	//if(Wavelength[i]>=590.0 && Wavelength[i]<=610.0){
@@ -225,12 +225,14 @@ void terzina::Loop(TString histOut){
     }
   }
   ///////////////////
-  //xMaxCenter = h1_PosX->GetBinCenter(h1_PosX->GetMaximumBin());
-  //yMaxCenter = h1_PosY->GetBinCenter(h1_PosY->GetMaximumBin());
-  xMaxCenter = h1_PosX->GetMean();
-  yMaxCenter = h1_PosY->GetMean();
-  Double_t window_dl = 5;
-  TH2D *h2_PosY_vs_PosX_recentrate = new TH2D("h2_PosY_vs_PosX_recentrate","PosY vs PosX recentrate",500,xMaxCenter-window_dl,xMaxCenter+window_dl,500,yMaxCenter-window_dl,yMaxCenter+window_dl);
+  //xMaxCenter = 32.0;
+  //yMaxCenter = 0.0;
+  xMaxCenter = h1_PosX->GetBinCenter(h1_PosX->GetMaximumBin());
+  yMaxCenter = h1_PosY->GetBinCenter(h1_PosY->GetMaximumBin());
+  //xMaxCenter = h1_PosX->GetMean();
+  //yMaxCenter = h1_PosY->GetMean();
+  Double_t window_dl = 10;
+  TH2D *h2_PosY_vs_PosX_recentrate = new TH2D("h2_PosY_vs_PosX_recentrate","PosY vs PosX recentrate",1000,xMaxCenter-window_dl,xMaxCenter+window_dl,1000,yMaxCenter-window_dl,yMaxCenter+window_dl);
   for(unsigned int ii = 0;ii<vecPosX.size();ii++){
     h1_R_PSF->Fill(TMath::Sqrt((vecPosX.at(ii)-xMaxCenter)*(vecPosX.at(ii)-xMaxCenter) + (vecPosY.at(ii)-yMaxCenter)*(vecPosY.at(ii)-yMaxCenter)));
     h2_PosY_vs_PosX_recentrate->Fill(vecPosX.at(ii),vecPosY.at(ii));

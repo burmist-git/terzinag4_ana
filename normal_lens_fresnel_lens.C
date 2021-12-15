@@ -48,7 +48,7 @@ Int_t normal_lens_fresnel_lens(){
   ////////////////////////////////////////////////
   Double_t lens_n = 1.47;
   Double_t lens_f = 400.0; // mm
-  Double_t lens_R = 300.0; // mm
+  Double_t lens_R = 270.0; // mm
   Int_t nn = 25;
   ///////////////////////////////////////////////
   Double_t R;
@@ -66,7 +66,7 @@ Int_t normal_lens_fresnel_lens(){
   //
   TGraph *gr_lens_shape = new TGraph();
   //get_lens_shape(gr_lens_shape, lens_R, lens_n, lens_f, nn);
-  file_info_fresnel_lens_shape = "./fresnel_lens_shape_R300_f400_n25.dat";
+  file_info_fresnel_lens_shape = "./fresnel_lens_shape_R270_f400_n25.dat";
   get_fresnel_lens_shape(gr_lens_shape, lens_R, lens_n, lens_f, nn);
   //
   TCanvas *c1 = new TCanvas("c1","c2",10,10,800,800);
@@ -163,7 +163,7 @@ void get_fresnel_lens_shape(TGraph *gr_lens_shape, Double_t lens_R, Double_t len
   Double_t dR   = (Rmax - Rmin)/n;  // mm
   Double_t R;
   Double_t dl = 0.0;
-  Double_t lens_substrate_thickness = 10.0; //mm
+  Double_t lens_substrate_thickness = 5.0; //mm
   Double_t x1,x2,y1,y2,x,y;
   Double_t k,b;
   Int_t nii = 100;

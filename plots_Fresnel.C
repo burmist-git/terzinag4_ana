@@ -17,52 +17,19 @@ Double_t getPSF_r(TH1D *h1, Double_t val);
 void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, Double_t &psf_65percent, Double_t &psf_rms_radius, Double_t &posX_MaxVal, Double_t &posY_MaxVal, Bool_t toplot);
 TString round_o(float var);
 
-const Int_t nFiles = 42;
-TString fileNarr[nFiles];
+Int_t plots_Fresnel(){
 
-Int_t plots(){
-  fileNarr[0]="./hist_v02.00.00/hist_terzina_theta_0.0deg.root";
-  fileNarr[1]="./hist_v02.00.00/hist_terzina_theta_0.1deg.root";
-  fileNarr[2]="./hist_v02.00.00/hist_terzina_theta_0.2deg.root";
-  fileNarr[3]="./hist_v02.00.00/hist_terzina_theta_0.3deg.root";
-  fileNarr[4]="./hist_v02.00.00/hist_terzina_theta_0.4deg.root";
-  fileNarr[5]="./hist_v02.00.00/hist_terzina_theta_0.5deg.root";
-  fileNarr[6]="./hist_v02.00.00/hist_terzina_theta_0.6deg.root";
-  fileNarr[7]="./hist_v02.00.00/hist_terzina_theta_0.7deg.root";
-  fileNarr[8]="./hist_v02.00.00/hist_terzina_theta_0.8deg.root";
-  fileNarr[9]="./hist_v02.00.00/hist_terzina_theta_0.9deg.root";
-  fileNarr[10]="./hist_v02.00.00/hist_terzina_theta_1.0deg.root";
-  fileNarr[11]="./hist_v02.00.00/hist_terzina_theta_1.1deg.root";
-  fileNarr[12]="./hist_v02.00.00/hist_terzina_theta_1.2deg.root";
-  fileNarr[13]="./hist_v02.00.00/hist_terzina_theta_1.3deg.root";
-  fileNarr[14]="./hist_v02.00.00/hist_terzina_theta_1.4deg.root";
-  fileNarr[15]="./hist_v02.00.00/hist_terzina_theta_1.5deg.root";
-  fileNarr[16]="./hist_v02.00.00/hist_terzina_theta_1.6deg.root";
-  fileNarr[17]="./hist_v02.00.00/hist_terzina_theta_1.7deg.root";
-  fileNarr[18]="./hist_v02.00.00/hist_terzina_theta_1.8deg.root";
-  fileNarr[19]="./hist_v02.00.00/hist_terzina_theta_1.9deg.root";
-  fileNarr[20]="./hist_v02.00.00/hist_terzina_theta_2.0deg.root";
-  fileNarr[21]="./hist_v02.00.00/hist_terzina_theta_2.1deg.root";
-  fileNarr[22]="./hist_v02.00.00/hist_terzina_theta_2.2deg.root";
-  fileNarr[23]="./hist_v02.00.00/hist_terzina_theta_2.3deg.root";
-  fileNarr[24]="./hist_v02.00.00/hist_terzina_theta_2.4deg.root";
-  fileNarr[25]="./hist_v02.00.00/hist_terzina_theta_2.5deg.root";
-  fileNarr[26]="./hist_v02.00.00/hist_terzina_theta_2.6deg.root";
-  fileNarr[27]="./hist_v02.00.00/hist_terzina_theta_2.7deg.root";
-  fileNarr[28]="./hist_v02.00.00/hist_terzina_theta_2.8deg.root";
-  fileNarr[29]="./hist_v02.00.00/hist_terzina_theta_2.9deg.root";
-  fileNarr[30]="./hist_v02.00.00/hist_terzina_theta_3.0deg.root";
-  fileNarr[31]="./hist_v02.00.00/hist_terzina_theta_3.1deg.root";
-  fileNarr[32]="./hist_v02.00.00/hist_terzina_theta_3.2deg.root";
-  fileNarr[33]="./hist_v02.00.00/hist_terzina_theta_3.3deg.root";
-  fileNarr[34]="./hist_v02.00.00/hist_terzina_theta_3.4deg.root";
-  fileNarr[35]="./hist_v02.00.00/hist_terzina_theta_3.5deg.root";
-  fileNarr[36]="./hist_v02.00.00/hist_terzina_theta_3.6deg.root";
-  fileNarr[37]="./hist_v02.00.00/hist_terzina_theta_3.7deg.root";
-  fileNarr[38]="./hist_v02.00.00/hist_terzina_theta_3.8deg.root";
-  fileNarr[39]="./hist_v02.00.00/hist_terzina_theta_3.9deg.root";
-  fileNarr[40]="./hist_v02.00.00/hist_terzina_theta_4.0deg.root";
-  fileNarr[41]="./hist_v02.00.00/hist_terzina_theta_4.1deg.root";
+  TString rootHistfileIn;
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_0.0deg.root";
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_1.0deg.root";
+
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_0.0deg.root";
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_1.0deg.root";
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_2.0deg.root";
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_3.0deg.root";
+  //rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_4.0deg.root";
+  rootHistfileIn = "./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_2.0deg.root";
+    
   Double_t psf_95percent;
   Double_t psf_80percent;
   Double_t psf_65percent;
@@ -71,193 +38,13 @@ Int_t plots(){
   Double_t posX_MaxVal;
   Double_t posY_MaxVal;
   //
-  Double_t psf_95percent_arr[nFiles];
-  Double_t psf_80percent_arr[nFiles];
-  Double_t psf_65percent_arr[nFiles];
-  Double_t psf_rms_radius_arr[nFiles];
-  Double_t posX_MaxVal_arr[nFiles];
-  Double_t posY_MaxVal_arr[nFiles];
-  Double_t posX_MaxVal_arr_err[nFiles];
-  Double_t posY_MaxVal_arr_err[nFiles];
-  //
-  Double_t theta_arr[nFiles];
-  Double_t theta_arr_err[nFiles];
-  //
-  TString fileN;
-  Bool_t toplot = false;
-  for(Int_t i = 0;i<nFiles;i++){
-  //for(Int_t i = 16;i<17;i++){
-    theta_arr[i] = 0.1*i;
-    theta_arr_err[i] = 0.0;
-    fileN = fileNarr[i];
-    //fileN = "./hist_v02.00.00/hist_terzina_theta_0.0deg.root";
-    psf_culc(fileN, psf_95percent, psf_80percent, psf_65percent, psf_rms_radius, posX_MaxVal, posY_MaxVal, toplot);
-    cout<<fileN<<endl;
-    cout<<"psf_95percent  = "<<psf_95percent<<endl
-	<<"psf_80percent  = "<<psf_80percent<<endl
-	<<"psf_65percent  = "<<psf_65percent<<endl
-    	<<"psf_rms_radius = "<<psf_rms_radius<<endl;
-    psf_95percent_arr[i] = psf_95percent;
-    psf_80percent_arr[i] = psf_80percent;
-    psf_65percent_arr[i] = psf_65percent;
-    psf_rms_radius_arr[i] = psf_rms_radius;
-    posX_MaxVal_arr[i] = posX_MaxVal;
-    posY_MaxVal_arr[i] = posY_MaxVal;
-    posX_MaxVal_arr_err[i] = psf_80percent;
-    posY_MaxVal_arr_err[i] = psf_80percent;
-  }
-
-  //TGraph *gr_95percent = new TGraph(nFiles,theta_arr,psf_95percent_arr);
-  //TGraph *gr_80percent = new TGraph(nFiles,theta_arr,psf_80percent_arr);
-  //TGraph *gr_65percent = new TGraph(nFiles,theta_arr,psf_65percent_arr);
-  //
-  TGraph *gr_95percent = new TGraph(nFiles-9,theta_arr,psf_95percent_arr);
-  TGraph *gr_80percent = new TGraph(nFiles-9,theta_arr,psf_80percent_arr);
-  TGraph *gr_65percent = new TGraph(nFiles-9,theta_arr,psf_65percent_arr);
-  TGraph *gr_rms_radius = new TGraph(nFiles-9,theta_arr,psf_rms_radius_arr);
-
-  //
-  TGraphErrors *gr_xmax_pos = new TGraphErrors(nFiles-9,theta_arr,posX_MaxVal_arr,theta_arr_err,posX_MaxVal_arr_err);
-  TGraphErrors *gr_ymax_pos = new TGraphErrors(nFiles-9,theta_arr,posY_MaxVal_arr,theta_arr_err,posY_MaxVal_arr_err);
-  //
-  gr_95percent->SetMarkerStyle(20);
-  gr_80percent->SetMarkerStyle(20);
-  gr_65percent->SetMarkerStyle(20);
-  gr_rms_radius->SetMarkerStyle(21);
-  //
-  gr_95percent->SetMarkerColor(kRed);
-  gr_80percent->SetMarkerColor(kBlack);
-  gr_65percent->SetMarkerColor(kBlue+1);
-  gr_rms_radius->SetMarkerColor(kGreen+2);
-  //
-  gr_95percent->SetLineColor(kRed);
-  gr_80percent->SetLineColor(kBlack);
-  gr_65percent->SetLineColor(kBlue+2);
-  gr_rms_radius->SetLineColor(kGreen+2);
-  //
-  gr_95percent->SetLineWidth(3);
-  gr_80percent->SetLineWidth(3);
-  gr_65percent->SetLineWidth(3);
-  gr_rms_radius->SetLineWidth(3);
-  //
-  TCanvas *c4 = new TCanvas("c4","c4",10,10,1200,800);
-  gStyle->SetPalette(1);
-  gStyle->SetFrameBorderMode(0);
-  gROOT->ForceStyle();
-  gStyle->SetOptStat(kFALSE);
-  //
-  c4->SetRightMargin(0.01);
-  c4->SetLeftMargin(0.08);
-  c4->SetTopMargin(0.01);
-  c4->SetBottomMargin(0.08);
-  //
-  gPad->SetGridx();
-  gPad->SetGridy();
-  //
-  TMultiGraph *mg = new TMultiGraph();
-  mg->Add(gr_95percent);
-  mg->Add(gr_80percent);
-  mg->Add(gr_65percent);
-  mg->Add(gr_rms_radius);
-  //mg->GetXaxis()->SetLimits(xMin,xMax);
-  mg->Draw("APL");
-  mg->SetMinimum(0.0);
-  mg->SetMaximum(4.0);
-  //mg->SetMaximum(6.0);
-  //mg->SetMaximum(5.0);
-  mg->GetXaxis()->SetTitle("#theta, deg");
-  mg->GetYaxis()->SetTitle("PSF, mm");
-  //  
-  TLegend *leg = new TLegend(0.6,0.6,0.9,0.9,"","brNDC");
-  leg->AddEntry(gr_95percent, "95 % of light", "pl");
-  leg->AddEntry(gr_80percent, "80 % of light", "pl");
-  leg->AddEntry(gr_65percent, "65 % of light", "pl");
-  leg->AddEntry(gr_rms_radius, "rms of the light spot radius", "pl");
-  leg->Draw();
-  //
-  TCanvas *c5 = new TCanvas("c5","c5",10,10,1000,800);
-  gStyle->SetPalette(1);
-  gStyle->SetFrameBorderMode(0);
-  gROOT->ForceStyle();
-  gStyle->SetOptStat(kFALSE);
-  //
-  c5->SetRightMargin(0.02);
-  c5->SetLeftMargin(0.08);
-  c5->SetTopMargin(0.02);
-  c5->SetBottomMargin(0.08);
-  //
-  gPad->SetGridx();
-  gPad->SetGridy();
-  //
-  gr_xmax_pos->Fit("pol1","Q","",0.0,3.2);
-  gr_xmax_pos->SetTitle("");
-  gr_xmax_pos->GetXaxis()->SetLimits(-0.5,3.5);
-  gr_xmax_pos->SetMarkerStyle(20);
-  gr_xmax_pos->SetLineWidth(2);
-  gr_xmax_pos->Draw("APL");
-  gr_xmax_pos->GetXaxis()->SetTitle("#theta, deg");
-  gr_xmax_pos->GetYaxis()->SetTitle("Centre of gravity, mm");
-  //
-  //POEMMA DATA
-  //
-  Double_t poemma_theta[18];
-  Double_t poemma_rms_radius[18];
-  poemma_theta[0]=0;                   poemma_rms_radius[0]=1;
-  poemma_theta[1]=0.6219512195121961;  poemma_rms_radius[1]=1;
-  poemma_theta[2]=1.9390243902439046;  poemma_rms_radius[2]=0.9554140127388533;
-  poemma_theta[3]=2.926829268292682;   poemma_rms_radius[3]=0.8980891719745223;
-  poemma_theta[4]=4.134146341463415;   poemma_rms_radius[4]=0.8726114649681525;
-  poemma_theta[5]=5.487804878048783;   poemma_rms_radius[5]=0.9235668789808917;
-  poemma_theta[6]=6.951219512195122;   poemma_rms_radius[6]=1.0700636942675161;
-  poemma_theta[7]=7.79268292682927;    poemma_rms_radius[7]=1.1528662420382165;
-  poemma_theta[8]=8.890243902439027;   poemma_rms_radius[8]=1.2611464968152868;
-  poemma_theta[9]=10.207317073170733;  poemma_rms_radius[9]=1.3566878980891721;
-  poemma_theta[10]=11.451219512195125; poemma_rms_radius[10]=1.4267515923566878;
-  poemma_theta[11]=12.98780487804878;  poemma_rms_radius[11]=1.4904458598726116;
-  poemma_theta[12]=14.597560975609758; poemma_rms_radius[12]=1.5286624203821655;
-  poemma_theta[13]=16.317073170731703; poemma_rms_radius[13]=1.4968152866242037;
-  poemma_theta[14]=17.890243902439025; poemma_rms_radius[14]=1.407643312101911;
-  poemma_theta[15]=19.646341463414636; poemma_rms_radius[15]=1.4522292993630572;
-  poemma_theta[16]=21.07317073170732;  poemma_rms_radius[16]=1.535031847133758;
-  poemma_theta[17]=22.5;               poemma_rms_radius[17]=1.6433121019108279;
-  //
-  TGraph *gr_poemma_rms_radius = new TGraph(18,poemma_theta,poemma_rms_radius);
-  gr_poemma_rms_radius->SetMarkerStyle(20);
-  gr_poemma_rms_radius->SetMarkerColor(kBlack);
-  gr_poemma_rms_radius->SetLineColor(kBlack);
-  gr_poemma_rms_radius->SetLineWidth(3.0);
-  //
-  TCanvas *c6 = new TCanvas("c6","c6",10,10,1200,800);
-  gStyle->SetPalette(1);
-  gStyle->SetFrameBorderMode(0);
-  gROOT->ForceStyle();
-  gStyle->SetOptStat(kFALSE);
-  //
-  c6->SetRightMargin(0.01);
-  c6->SetLeftMargin(0.08);
-  c6->SetTopMargin(0.01);
-  c6->SetBottomMargin(0.08);
-  //
-  gPad->SetGridx();
-  gPad->SetGridy();
-  //
-  TMultiGraph *mg_po = new TMultiGraph();
-  mg_po->Add(gr_poemma_rms_radius);
-  mg_po->Add(gr_rms_radius);
-  //mg->GetXaxis()->SetLimits(xMin,xMax);
-  mg_po->Draw("APL");
-  mg_po->SetMinimum(0.0);
-  mg_po->SetMaximum(2.0);
-  //mg->SetMaximum(6.0);
-  //mg->SetMaximum(5.0);
-  mg_po->GetXaxis()->SetTitle("#theta, deg");
-  mg_po->GetYaxis()->SetTitle("RMS spot radius, mm");
-  //  
-  TLegend *leg_po = new TLegend(0.6,0.6,0.9,0.9,"","brNDC");
-  leg_po->AddEntry(gr_poemma_rms_radius, "POEMMA", "pl");
-  leg_po->AddEntry(gr_rms_radius,        "Terzina", "pl");
-  leg_po->Draw();
-  //  
+  Bool_t toplot = true;
+  psf_culc( rootHistfileIn, psf_95percent, psf_80percent, psf_65percent, psf_rms_radius, posX_MaxVal, posY_MaxVal, toplot);
+  cout<<rootHistfileIn<<endl;
+  cout<<"psf_95percent  = "<<psf_95percent<<endl
+      <<"psf_80percent  = "<<psf_80percent<<endl
+      <<"psf_65percent  = "<<psf_65percent<<endl
+      <<"psf_rms_radius = "<<psf_rms_radius<<endl;
   return 0;
 }
 
@@ -311,16 +98,18 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
   //h1_1->Rebin(4);
   //h1_1->SetTitle("");
 
-  Double_t window_dim = 1.5;
+  Double_t window_dim = 10.0;
   //  
-  //Double_t x_PosX_MaxVal = h1_5->GetBinCenter(h1_5->GetMaximumBin());
-  Double_t x_PosX_MaxVal = h1_5->GetMean();
+  //Double_t x_PosX_MaxVal = 32.0;
+  Double_t x_PosX_MaxVal = h1_5->GetBinCenter(h1_5->GetMaximumBin());
+  //Double_t x_PosX_MaxVal = h1_5->GetMean();
   Double_t x_PosX_RangeMin = x_PosX_MaxVal - window_dim;
   Double_t x_PosX_RangeMax = x_PosX_MaxVal + window_dim;
   posX_MaxVal = x_PosX_MaxVal;
   //  
-  //Double_t x_PosY_MaxVal = h1_6->GetBinCenter(h1_6->GetMaximumBin());
-  Double_t x_PosY_MaxVal = h1_6->GetMean();
+  //Double_t x_PosY_MaxVal = 0.0;
+  Double_t x_PosY_MaxVal = h1_6->GetBinCenter(h1_6->GetMaximumBin());
+  //Double_t x_PosY_MaxVal = h1_6->GetMean();
   Double_t x_PosY_RangeMin = x_PosY_MaxVal - window_dim;
   Double_t x_PosY_RangeMax = x_PosY_MaxVal + window_dim;
   posY_MaxVal = x_PosY_MaxVal;
@@ -330,7 +119,8 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
   
   //////////////////////////////////////////////////////
   TH1D *h1_integral_PSF = new TH1D(*h1_PSF);
-  Double_t norm = h1_5->Integral(0,h1_5->GetNbinsX());
+  Double_t norm = h1_5->Integral(1,(h1_5->GetNbinsX()-1));
+  cout<<"norm = "<<norm<<endl;
   IntegrateInR_PSF(h1_integral_PSF, h1_PSF, norm);
   h1_integral_PSF->SetLineColor(kBlack);
   h1_integral_PSF->SetLineWidth(3.0);
@@ -340,7 +130,7 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
   psf_80percent = getPSF_r(h1_integral_PSF,0.80);
   psf_65percent = getPSF_r(h1_integral_PSF,0.65);
   psf_rms_radius = h1_PSF->GetRMS();
-  //cout<<"psf_rms_radius == "<<psf_rms_radius<<endl;
+  cout<<"psf_rms_radius = "<<psf_rms_radius<<endl;
   //////////////////////////////////////////////////////
   
   if(toplot){
@@ -450,6 +240,7 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
       TVector2 *v = new TVector2();
       Double_t phi = 2.0*TMath::Pi()/nnjj*jj;
       v->SetMagPhi(getPSF_r(h1_integral_PSF,0.80),phi);
+      //v->SetMagPhi(getPSF_r(h1_integral_PSF,0.65),phi);
       TLine *l1 = new TLine(v->X()+x_PosX_MaxVal,
 			    v->Y()+x_PosY_MaxVal,
 			    v->Rotate(TMath::Pi()/nnjj*2.0).X()+x_PosX_MaxVal,
@@ -479,6 +270,8 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
     c1->cd(12);
     gPad->SetGridx();
     gPad->SetGridy();
+    h1_integral_PSF->SetMinimum(0.0);
+    h1_integral_PSF->SetMaximum(1.1);
     h1_integral_PSF->Draw();
     TString ttex_data_psf_95 = "PSF @ 95 : ";
     TString ttex_data_psf_80 = "PSF @ 80 : ";
@@ -499,8 +292,7 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
     filePdfN += ".pdf";
     c1->SaveAs(filePdfN.Data());
   }
-  
-  
+    
   if(toplot){
   //if(false){
     TCanvas *c2 = new TCanvas("c2",fileN.Data(),10,10,1500,500);
@@ -637,8 +429,8 @@ void psf_culc(TString fileN, Double_t &psf_95percent, Double_t &psf_80percent, D
 }
 
 void IntegrateInR_PSF(TH1D *h1_integral_PSF, TH1D *h1_r, Double_t norm){
-  for(Int_t i = 0;i<h1_r->GetNbinsX();i++)
-    h1_integral_PSF->SetBinContent(i,h1_r->Integral(0,i)/norm);
+  for(Int_t i = 1;i<(h1_r->GetNbinsX()-1);i++)
+    h1_integral_PSF->SetBinContent(i,h1_r->Integral(1,i)/norm);
 }
 
 Double_t getPSF_r(TH1D *h1, Double_t val){

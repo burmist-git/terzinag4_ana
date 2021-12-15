@@ -14,7 +14,7 @@ using namespace std;
 Int_t plots_single(){
 
   TString fileN;
-  fileN = "./hist/hist_terzina_1.0e7.root";
+  //fileN = "./hist/hist_terzina_1.0e7.root";
   //fileN = "./hist/hist_terzina.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00.root";
 
@@ -28,10 +28,19 @@ Int_t plots_single(){
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_90phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_135phi.root";
   //fileN = "./hist/hist_terzina_PSF_v01.00.00_3theta_180phi.root";
+
+  //fileN = "./hist_fresnel/hist_terzina.root";
+  //fileN = "./hist_fresnel/hist_terzina.root";
+  fileN = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_0.0deg.root";
+  //fileN = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_1.0deg.root";
+  //fileN = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_2.0deg.root";
+  //fileN = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_3.0deg.root";
+  //fileN = "./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_4.0deg.root";
   
   TFile *f1 = new TFile(fileN.Data());
 
-  TH1D *h1_1 = (TH1D*)f1->Get("h1_Time");
+  //TH2D *h1_1 = (TH2D*)f1->Get("h2_PosX_vs_primPosX");
+  TH2D *h2_1 = (TH2D*)f1->Get("h2_PosY_vs_PosX");
 
   //TH1D *h1_1 = (TH1D*)f1->Get("h1_photPathLen");
 
@@ -41,23 +50,32 @@ Int_t plots_single(){
   
   //h1_1->Rebin(4);
   //h1_1->SetTitle("");
-
+  
   TCanvas *c1 = new TCanvas("c1",fileN.Data(),10,10,800,800);
   //TCanvas *c1 = new TCanvas("c1",fileN.Data(),10,10,600,600);
   gStyle->SetPalette(1);
   gStyle->SetFrameBorderMode(0);
   gROOT->ForceStyle();
   gStyle->SetStatColor(kWhite);
-  //gStyle->SetOptStat(kFALSE);
+  //
+  gPad->SetGridy();
+  gPad->SetGridx();
+  gStyle->SetOptStat(kFALSE);
   //
   //h1_1->SetLineColor(kBlack);
   //h1_1->SetLineWidth(3.0);
-  h1_1->SetLineColor(kBlack);
-  h1_1->SetLineWidth(3.0);
-  h1_1->Draw();
-
-  //h1_1->GetXaxis()->SetTitle("Photon path lenght, mm");
-  h1_1->GetXaxis()->SetTitle("Photon time, ns");
+  //h1_1->SetLineColor(kBlack);
+  //h1_1->SetLineWidth(3.0);
+  h2_1->SetTitle("");
+  h2_1->Draw("ZCOLOR");
+  //h1_1->Draw();
+  h2_1->GetXaxis()->SetRangeUser(-60,60);
+  h2_1->GetYaxis()->SetRangeUser(-60,60);
+  h2_1->GetXaxis()->SetTitle("PosX, mm");
+  h2_1->GetYaxis()->SetTitle("PosY, mm");
+  
+  //h1_1->GetXaxis()->SetTitle("primPosX, mm");
+  //h1_1->GetXaxis()->SetTitle("PosX, mm");
     /*
   for(i = 0;i<nChannels;i++){
     h1_Arr[i]->SetLineColor(colorArr[i]);
