@@ -146,8 +146,20 @@ else
 	#outHistSingleF="./hist_fresnel/hist_terzina_1e.7_n100_spectrum_400_4.0deg.root"
 	#runterzina_single_root_file 1 $inRootFiles $outHistSingleF
 
-	inRootFiles="./data_fresnel/terzina_1e.7_n25_spectrum_full_2.0deg.root"
-	outHistSingleF="./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_2.0deg.root"
+	#inRootFiles="./data_fresnel/terzina_1e.7_n25_spectrum_full_2.0deg.root"
+	#outHistSingleF="./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_2.0deg.root"
+	#inRootFiles="../terzinag4-build/terzina.root"
+	#outHistSingleF="./hist_small_pat/hist_terzina.root"
+	#inRootFiles="../terzinag4-build/terzina_1deg.root"
+	#outHistSingleF="./hist_small_pat/hist_terzina_1deg.root"
+	#inRootFiles="../terzinag4-build/terzina_2deg.root"
+	#outHistSingleF="./hist_small_pat/hist_terzina_2deg.root"
+	#inRootFiles="../terzinag4-build/terzina_3deg.root"
+	#outHistSingleF="./hist_small_pat/hist_terzina_3deg.root"
+	#inRootFiles="../terzinag4-build/terzina_corrector.root"
+	#outHistSingleF="./hist_small_pat/hist_terzina_corrector.root"
+	inRootFiles="../terzinag4-build/terzina_geomid_1_corrector.root"
+	outHistSingleF="./hist_pat/hist_terzina_geomid_1_corrector.root"
 	runterzina_single_root_file 1 $inRootFiles $outHistSingleF
 
     elif [ "$1" = "-l" ]; then

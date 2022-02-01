@@ -23,9 +23,14 @@ Int_t plots_corrector_lens(){
   TString fileN;
   TString outDataFitParFileIn;
   //fileN = "./hist/hist_terzina_1.0e7.root";
-  fileN = "./hist_v02.00.00b/hist_terzina_1e7.0.root";
-
-  outDataFitParFileIn = "./hist_v02.00.00b/lens_n_reff_1.47.dat";
+  //fileN = "./hist_v02.00.00b/hist_terzina_1e7.0.root";
+  //fileN = "./hist_v02.00.00b/hist_terzina_1e7.0.root";
+  //fileN = "./hist_small_pat/hist_terzina_corrector.root";
+  fileN = "./hist_pat/hist_terzina_geomid_1_corrector.root";
+  
+  //outDataFitParFileIn = "./hist_v02.00.00b/lens_n_reff_1.47.dat";
+  //outDataFitParFileIn = "./hist_small_pat/lens_n_reff_1.47.dat";
+  outDataFitParFileIn = "./hist_pat/lens_n_reff_1.47.dat";
 
   Double_t lens_Thickness = 10.0;
   
@@ -38,6 +43,10 @@ Int_t plots_corrector_lens(){
   
   Double_t xMin = -300 + 4;
   Double_t xMax =  300 - 4;
+  //Double_t xMin = -197 + 1;
+  //Double_t xMax =  197 - 1;
+  //Double_t xMin = -252 + 1;
+  //Double_t xMax =  252 - 1;
 
   ///////////////////////////////////////////////
 

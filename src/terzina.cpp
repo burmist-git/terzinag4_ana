@@ -144,8 +144,17 @@ void terzina::Loop(TString histOut){
       h1_z0_reco->Fill(z0_reco);
       //if(TMath::Abs(z0_reco + 63)<0.00001 && TMath::Abs(primPosX)>95.0){
       //if(TMath::Abs(z0_reco + 63)<1000000 && TMath::Abs(primPosX)>-10000000){
-      if(Time[i]>=0 && Time[i]<=10000){
-	//if(Time[i]>=2.7 && Time[i]<=3.2){
+      //if(Time[i]>=0 && Time[i]<=10000){
+      //0.0deg
+      //if(Time[i]>=3.01 && Time[i]<=3.02){
+      //1.0deg
+      //if(Time[i]>=2.96 && Time[i]<=3.04){
+      //2.0deg
+      //if(Time[i]>=2.98 && Time[i]<=3.06){
+      //3.0deg
+      //if(Time[i]>=2.98 && Time[i]<=3.06){
+      //if(Time[i]>=2.7 && Time[i]<=3.2){
+      if(Time[i]>=2.7 && Time[i]<=3.0){
 	//if(Wavelength[i]>=290.0 && Wavelength[i]<=310.0){
 	//if(Wavelength[i]>=390.0 && Wavelength[i]<=410.0){
 	//if(Wavelength[i]>=590.0 && Wavelength[i]<=610.0){
