@@ -144,24 +144,32 @@ void terzina::Loop(TString histOut){
       h1_z0_reco->Fill(z0_reco);
       //if(TMath::Abs(z0_reco + 63)<0.00001 && TMath::Abs(primPosX)>95.0){
       //if(TMath::Abs(z0_reco + 63)<1000000 && TMath::Abs(primPosX)>-10000000){
-      //if(Time[i]>=0 && Time[i]<=10000){
-      //0.0deg
+      if(Time[i]>=0 && Time[i]<=10000){
       //if(Time[i]>=3.01 && Time[i]<=3.02){
-      //1.0deg
-      //if(Time[i]>=2.96 && Time[i]<=3.04){
+      //if(Time[i]>=2.95 && Time[i]<=3.1){
       //2.0deg
       //if(Time[i]>=2.98 && Time[i]<=3.06){
       //3.0deg
       //if(Time[i]>=2.98 && Time[i]<=3.06){
       //if(Time[i]>=2.7 && Time[i]<=3.2){
-      if(Time[i]>=2.7 && Time[i]<=3.0){
+      //if(Time[i]>=2.7 && Time[i]<=3.0){
 	//if(Wavelength[i]>=290.0 && Wavelength[i]<=310.0){
 	//if(Wavelength[i]>=390.0 && Wavelength[i]<=410.0){
 	//if(Wavelength[i]>=590.0 && Wavelength[i]<=610.0){
 	if(Wavelength[i]>=0.0 && Wavelength[i]<=2000.0){
 	  //if(Time[i]>=4.7 && Time[i]<=4.8){
 	  //
-      if((PosX[i]*PosX[i] + PosY[i]*PosY[i])>0.0*0.0 && (PosX[i]*PosX[i] + PosY[i]*PosY[i])<400.0*400.0){
+      if((PosX[i]*PosX[i] + PosY[i]*PosY[i])>=0.0*0.0 &&
+	 (PosX[i]*PosX[i] + PosY[i]*PosY[i])<400.0*400.0){
+      //if(((PosX[i] - 57.1)*(PosX[i] - 57.1) + PosY[i]*PosY[i])>=0.0*0.0 &&
+	  // ((PosX[i] - 57.1)*(PosX[i] - 57.1) + PosY[i]*PosY[i])<5.0*5.0){
+       //if((PosX[i]*PosX[i] + PosY[i]*PosY[i])>=0.0*0.0 &&
+       //(PosX[i]*PosX[i] + PosY[i]*PosY[i])<2.0*2.0){
+	//if((PosX[i]*PosX[i] + PosY[i]*PosY[i])>10.5*10.5 &&
+	  // (PosX[i]*PosX[i] + PosY[i]*PosY[i])<12.0*12.0){
+	//if((PosX[i]*PosX[i] + PosY[i]*PosY[i])>56.0*56.0 &&
+	//(PosX[i]*PosX[i] + PosY[i]*PosY[i])<60.0*60.0){
+
 	h1_primPosX->Fill(primPosX);
 	h1_primPosY->Fill(primPosY);
 	h1_primPosZ->Fill(primPosZ);

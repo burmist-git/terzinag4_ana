@@ -15,16 +15,8 @@ using namespace std;
 
 Int_t plots_PSF(){
   TString fileName;
-  //fileName="./hist_fresnel/hist_terzina.root";
-  //fileName="./hist_fresnel/hist_terzina_1e7.root";
-  //fileName="./hist_fresnel/hist_terzina_1e.7_0.0deg.root";
-  //fileName="./hist_fresnel/hist_terzina_1e.7_1.0deg.root";
-  //fileName="./hist_fresnel/hist_terzina_1e.7_n25_spectrum_full_0.0deg.root";
-  //fileName="./hist_small_pat/hist_terzina.root";
-  //fileName="./hist_small_pat/hist_terzina_1deg.root";
-  fileName="./hist_small_pat/hist_terzina_2deg.root";
-  //fileName="./hist_small_pat/hist_terzina_3deg.root";
-  //fileName="./hist_pat/hist_terzina_geomid_1_corrector.root";
+  //fileName = "./hist_GeomID11/hist_terzina_PSF_with_corrector_0.0deg.root";
+  fileName = "./hist_GeomID11/hist_terzina_PSF_with_corrector_3.5deg.root";
   TFile *f1 = new TFile(fileName.Data());
   //
   TH2D *h2_1 = (TH2D*)f1->Get("h2_primPosY_vs_primPosX");

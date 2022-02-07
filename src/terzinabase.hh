@@ -41,7 +41,7 @@ protected :
   //Tree name
   //const TString treeName = "arich";
   const TString treeName = "T";
-  static const Int_t nChannels = 1; //max namber of photons
+  static const Int_t nChannels = 10000; //max namber of photons
   // Fixed size dimensions of array or collections stored in the TTree if any.
   // Declaration of leaf types
   Int_t           EventID;
