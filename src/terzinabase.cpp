@@ -48,7 +48,7 @@ terzinabase::terzinabase(TString fileList) : fChain(0)
 
 terzinabase::terzinabase(TString inFileName, Int_t keyID) : fChain(0) 
 {
-  if(keyID == 1){
+  if(keyID == 1 || keyID == 2){
     ifstream indata;
     //TChain *theChain = new TChain("T");
     TChain *theChain = new TChain(treeName.Data());

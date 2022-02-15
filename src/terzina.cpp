@@ -16,6 +16,7 @@
 #include <TProfile.h>
 #include <TRandom3.h>
 #include <TMath.h>
+#include <TTreeReader.h>
 
 //C, C++
 #include <iostream>
@@ -321,4 +322,424 @@ void terzina::Loop(TString histOut){
   h1_R_PSF->Write();
   //
   rootFile->Close();
+}
+
+void terzina::read_Eff_vs_wl(TString datafileIn, TGraph *gr,TString nameTitle){
+  ifstream fileIn(datafileIn.Data());
+  double xval;
+  double yval;
+  gr->SetName(nameTitle.Data());
+  gr->SetTitle(nameTitle.Data());
+  if (fileIn.is_open()){
+    while(fileIn>>xval>>yval){
+      gr->SetPoint(gr->GetN(),xval,yval);
+    }
+    fileIn.close();
+  }
+  else cout<<"Unable to open file"<<endl;
+}
+
+Bool_t terzina::ifQE(Double_t wl, TString qe_ID, TRandom3 *rnd){
+  Double_t prob_val;
+  if(qe_ID == "NUVHD"){
+    prob_val = _gr_QE_NUVHD->Eval(wl);
+    if(rnd->Uniform()<=prob_val)
+      return true;
+    return false;
+  }
+  else
+    assert(0);
+  return false;
+}
+
+Bool_t terzina::if_mirror(Double_t wl, TString mirror_ID, TRandom3 *rnd){
+  Double_t prob_val;
+  if(mirror_ID == "mirror_Reflectance_Unpolarized"){
+    prob_val = _gr_mirror_Reflectance_Unpolarized->Eval(wl);
+    //prob_val = 1.0;
+    if(rnd->Uniform()<=prob_val)
+      return true;
+    return false;
+  }
+  else
+    assert(0);
+  return false;
+}
+
+Bool_t terzina::if_lens(Double_t wl, TString lens_ID, TRandom3 *rnd){
+  Double_t prob_val;
+  if(lens_ID == "DEFAULT"){
+    prob_val = 0.95*0.95;
+    //prob_val = 1.0;
+    if(rnd->Uniform()<=prob_val)
+      return true;
+    return false;
+  }
+  else
+    assert(0);
+  return false;
+}
+
+Bool_t terzina::if_package_fill_factor(TString package_ID, TRandom3 *rnd){
+  Double_t prob_val;
+  if(package_ID == "DEFAULT"){
+    prob_val = 1.0;
+    if(rnd->Uniform()<=prob_val)
+      return true;
+    return false;
+  }
+  else
+    assert(0);
+  return false;
+}
+
+Bool_t terzina::crosstalk(Double_t prob, TRandom3 *rnd){
+  if(rnd->Uniform()<=prob)
+      return true;
+  return false;
+}
+
+void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowerAxis, TString outRootFileF){
+  //
+  readEventFormRootFile(inRootFileWithShower, distanceFromShowerAxis);
+  std::cout<<"_nPhotonsPerM2      "<<_nPhotonsPerM2<<std::endl
+    	   <<"_h1_wavelength int. "<<_h1_wavelength->Integral(1,_h1_wavelength->GetNbinsX())<<std::endl
+	   <<"_h1_timeHist int.   "<<_h1_timeHist->Integral(1,_h1_timeHist->GetNbinsX())<<std::endl
+	   <<"_h1_angleHist int.  "<<_h1_angleHist->Integral(1,_h1_angleHist->GetNbinsX())<<std::endl;  
+  _gr_QE_NUVHD = new TGraph();
+  _gr_mirror_Reflectance_Unpolarized = new TGraph();
+  read_Eff_vs_wl("PDE_NUVHD_3.90V_Pxt_15.dat",_gr_QE_NUVHD,"_gr_QE_NUVHD");
+  read_Eff_vs_wl("al_mirror_Reflectance_Unpolarized_nm.dat",_gr_mirror_Reflectance_Unpolarized,"_gr_mirror_Reflectance_Unpolarized");
+  //Double_t xVal, yVal;
+  //_gr_mirror_Reflectance_Unpolarized->GetPoint(0,xVal,yVal);
+  //_gr_QE_NUVHD->GetPoint(3,xVal,yVal);
+  //cout<<_gr_QE_NUVHD->Eval(421.3)<<endl;
+  //cout<<_gr_mirror_Reflectance_Unpolarized->Eval(421.3)<<endl;
+  //cout<<xVal<<" "<<yVal<<endl;
+  //assert(0);
+  //
+  TRandom3 *rnd = new TRandom3(2342342);
+  //
+  Int_t i = 0;
+  //
+  TH1D *h1_nPhot = new TH1D("h1_nPhot","nPhot",400,0,400);
+  TH1D *h1_npe = new TH1D("h1_npe","n p.e.",400,0,400);
+  //
+  TH1D *h1_primPosX = new TH1D("h1_primPosX","primPosX",1000,-400,400);
+  TH1D *h1_primPosY = new TH1D("h1_primPosY","primPosY",1000,-400,400);
+  TH1D *h1_primPosZ = new TH1D("h1_primPosZ","primPosZ",1000,-400,400);
+  //
+  TH1D *h1_PosX = new TH1D("h1_PosX","PosX",5000,-100,100);
+  TH1D *h1_PosY = new TH1D("h1_PosY","PosY",5000,-100,100);
+  TH1D *h1_PosZ = new TH1D("h1_PosZ","PosZ",5000,-100,100);
+  //
+  TH1D *h1_Time = new TH1D("h1_Time","Time",10000,0,10);
+  //
+  TH1D *h1_Wavelength = new TH1D("h1_Wavelength","Wavelength",1000,200,1100);
+  //
+  TH2D *h2_primPosY_vs_primPosX = new TH2D("h2_primPosY_vs_primPosX","primPosY vs primPosX",400,-400,400,400,-400,400);
+  TH2D *h2_PosY_vs_PosX = new TH2D("h2_PosY_vs_PosX","PosY vs PosX",1000,-100,100,1000,-100,100);
+  //
+  TH1D *h1_proj_plane_z0 = new TH1D("h1_proj_plane_z0","h1_proj_plane_z0",1000,165,175);
+  //
+  Int_t npe = 0;
+  Long64_t nentries = fChain->GetEntriesFast();
+  cout<<"nentries = "<<nentries<<endl;
+  Long64_t nbytes = 0, nb = 0;
+  //
+  Double_t proj_plane_R  = 300.0;
+  Double_t proj_plane_x0 = 0.0;
+  Double_t proj_plane_y0 = 0.0;
+  Double_t proj_plane_z0 = 0.0;
+  //
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+  //for (Long64_t jentry=0; jentry<1000;jentry++) {
+  //Long64_t jentry_in=100;
+  //for (Long64_t jentry=jentry_in; jentry<(jentry_in+1);jentry++) {
+    Long64_t ientry = LoadTree(jentry);
+    if (ientry < 0) break;
+    nb = fChain->GetEntry(jentry);   nbytes += nb;
+    //
+    //thetaPhotons = TMath::ACos(primMomZ/TMath::Sqrt(primMomX*primMomX + primMomY*primMomY + primMomZ*primMomZ));
+    //thetaPhotons = thetaPhotons - TMath::Pi();
+    //if(primMomX>0)
+    //thetaPhotons = -thetaPhotons;
+    //thetaPhotons_deg = (thetaPhotons*180.0/TMath::Pi());
+    h1_nPhot->Fill(nPhot);
+    h1_primPosX->Fill(primPosX);
+    h1_primPosY->Fill(primPosY);
+    h1_primPosZ->Fill(primPosZ);
+    h2_primPosY_vs_primPosX->Fill(primPosX,primPosY);
+    if(nPhot>0){
+      npe = 0;
+      for(i = 0;i<nPhot;i++){
+	if(ifQE(Wavelength[i],"NUVHD",rnd)){
+	  if(if_mirror(Wavelength[i],"mirror_Reflectance_Unpolarized",rnd)){
+	    if(if_mirror(Wavelength[i],"mirror_Reflectance_Unpolarized",rnd)){
+	      if(if_lens(Wavelength[i],"DEFAULT",rnd)){
+		if(if_package_fill_factor("DEFAULT",rnd)){
+		  //if(Time[i]>3.01 && Time[i]<3.03){
+		  if(Time[i]>2.95 && Time[i]<3.1){
+		  //if(Time[i]>0.0 && Time[i]<100000){
+		    proj_plane_z0 = PosZ[i] + TMath::Sqrt(proj_plane_R*proj_plane_R -
+							  (PosX[i]*PosX[i] - proj_plane_x0*proj_plane_x0) -
+							  (PosY[i]*PosY[i] - proj_plane_y0*proj_plane_y0));
+		    h1_proj_plane_z0->Fill(proj_plane_z0);
+		    if(proj_plane_z0>=170 && proj_plane_z0<=172){
+		      do{
+			//
+			//
+			h1_PosX->Fill(PosX[i]);
+			h1_PosY->Fill(PosY[i]);
+			h1_PosZ->Fill(PosZ[i]);
+			//
+			h1_Time->Fill(Time[i]);
+			h1_Wavelength->Fill(Wavelength[i]);
+			//
+			h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
+			//
+			npe++;
+		      }
+		      while(crosstalk(0.0,rnd));
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+      }
+      h1_npe->Fill(npe);
+    }
+  }
+  ///////////////////
+  TFile* rootFile = new TFile(outRootFileF.Data(), "RECREATE", " Histograms", 1);
+  rootFile->cd();
+  if (rootFile->IsZombie()){
+    cout<<"  ERROR ---> file "<<outRootFileF.Data()<<" is zombi"<<endl;
+    assert(0);
+  }
+  else
+    cout<<"  Output Histos file ---> "<<outRootFileF.Data()<<endl;
+  //
+  h1_nPhot->Write();
+  h1_Time->Write();
+  //
+  h1_primPosX->Write();
+  h1_primPosY->Write();
+  h1_primPosZ->Write();
+  //
+  h1_PosX->Write();
+  h1_PosY->Write();
+  h1_PosZ->Write();
+  //
+  h1_proj_plane_z0->Write();
+  //
+  h2_primPosY_vs_primPosX->Write();
+  h2_PosY_vs_PosX->Write();
+  //
+  h1_Wavelength->Write();
+  //
+  h1_npe->Write();
+  //
+  _h1_distance->Write();
+  _h1_wavelength->Write();
+  _h1_timeHist->Write();
+  _h1_angleHist->Write();
+  _gr_QE_NUVHD->Write();
+  _gr_mirror_Reflectance_Unpolarized->Write();
+  //
+  rootFile->Close();
+}
+
+void terzina::readEventFormRootFile(TString inRootFileName_g4s, Double_t distanceFromTheAxisOfTheShower){
+  //
+  _h1_distance = new TH1D();
+  _h1_wavelength = new TH1D();
+  _h1_timeHist = new TH1D();
+  _h1_angleHist = new TH1D();
+  //
+  _h1_distance->SetName("_h1_distance");
+  _h1_wavelength->SetName("_h1_wavelength");
+  _h1_timeHist->SetName("_h1_timeHist");
+  _h1_angleHist->SetName("_h1_angleHist");
+  //
+  _h1_distance->SetTitle("_h1_distance");
+  _h1_wavelength->SetTitle("_h1_wavelength");
+  _h1_timeHist->SetTitle("_h1_timeHist");
+  _h1_angleHist->SetTitle("_h1_angleHist");
+  
+  TString inRootFileName = inRootFileName_g4s;
+  
+  //TString inRootFileName = "/home/dpncguest/home2/work/POEMMA/geant4/shower_sim/data/30km_Impact_Parameter.root";
+  //TString outHistRootFileName = "./hist/hist_Proton_100PeV_525km_67_7.root";
+  
+  //void Read( TString inRootFileName = "./data/Proton_100PeV_525km_67_7.root", TString outHistRootFileName = "./hist/hist_Proton_100PeV_525km_67_7.root"){
+  //TFile *fIn = new TFile("./data/Proton_100PeV_525km_67_7.root");
+  //TFile *fIn = new TFile("./data/Proton_100PeV_33km_85.root");
+
+  TFile *fIn = new TFile(inRootFileName.Data());
+
+  fIn->ls();
+  fIn->Print();
+
+  // -----------------------------------------------------------------------------
+  // Shower parameter
+  // -----------------------------------------------------------------------------
+  std::cout << std::endl;
+  std::cout << std::endl;
+  TTree *showerProp = (TTree*)fIn->Get("showerProp");
+  showerProp->ls();
+  showerProp->Print();
+  //
+  Double_t zenith, energy, startalt;
+  TBranch *energyBr = showerProp->GetBranch("energy");
+  energyBr->SetAddress(&energy);
+  //
+  TBranch *zenithBr = showerProp->GetBranch("zenith");
+  zenithBr->SetAddress(&zenith);
+  TBranch *startaltBr = showerProp->GetBranch("startalt");
+  startaltBr->SetAddress(&startalt);
+  Int_t nEntries = showerProp->GetEntries();
+  std::cout<<"nEntries:"<<" "<<nEntries<<std::endl;
+  showerProp->GetEntry(0);
+  std::cout<< "Zenith angle = " << zenith <<std::endl;
+  std::cout<< "E = " << energy << " PeV" << std::endl;
+  std::cout<< "Starting altitude = " << startalt << " km" << std::endl;
+  // -----------------------------------------------------------------------------
+  
+  // -----------------------------------------------------------------------------
+  // Cherenkov light parameter
+  // -----------------------------------------------------------------------------
+  std::cout <<std::endl;
+  std::cout <<std::endl;
+  TTree *cherPhProp = (TTree*)fIn->Get("cherPhProp");
+  cherPhProp->ls();
+  cherPhProp->Print();
+  TH1D *wavelength = NULL;
+  TH1D *distance = NULL;
+  TH1D *time_offset = NULL;
+  TH1D *angle_offset = NULL;
+  // wavelength
+  TBranch *wavelengthBr = cherPhProp->GetBranch("wavelength");
+  wavelengthBr->SetAddress(&wavelength);
+  cherPhProp->GetEntry(0);
+  TCanvas *cwl = new TCanvas("cwl", "cwl", 800, 600);
+  cwl->cd();
+  wavelength->SetDirectory(0);
+  wavelength->GetXaxis()->SetTitle("wavelength [nm]");
+  //wavelength->Draw();
+  // distance
+  TBranch *distanceBr = cherPhProp->GetBranch("distance");
+  distanceBr->SetAddress(&distance);
+  cherPhProp->GetEntry(0);
+  TCanvas *cdst = new TCanvas("cdst", "cdst", 800, 600);
+  cdst->cd();
+  distance->SetDirectory(0);
+  TH1D *hdistance = (TH1D *)(distance)->Clone();
+  //hdistance->SetTitle("distance");
+  //hdistance->GetYaxis()->SetTitle("photon density [pht/m^{2}]");
+  //hdistance->GetXaxis()->SetTitle("distance [km]");
+  //hdistance->Draw();
+  //time_offset
+  TBranch *time_offsetBr = cherPhProp->GetBranch("time_offset");
+  time_offsetBr->SetAddress(&time_offset);
+  cherPhProp->GetEntry(0);
+  TCanvas *ctoff = new TCanvas("ctoff", "ctoff", 800, 600);
+  ctoff->cd();
+  time_offset->SetDirectory(0);
+  //time_offset->GetXaxis()->SetTitle("ns");
+  //time_offset->Draw("histo");
+  // angle_offset
+  TBranch *angle_offsetBr = cherPhProp->GetBranch("angle_offset");
+  angle_offsetBr->SetAddress(&angle_offset);
+  cherPhProp->GetEntry(0);
+  TCanvas *cangoff = new TCanvas("cangoff", "cangoff", 800, 600);
+  cangoff->cd();
+  angle_offset->SetDirectory(0);
+  //angle_offset->GetXaxis()->SetTitle("deg");
+  //angle_offset->Draw("histo");
+  //----------------------------------------------------------------------------------------
+
+  //----------------------------------------------------------------------------------------
+  // time distribution
+  double dist = distanceFromTheAxisOfTheShower;
+  TTreeReader fReaderCherPh_time;
+  TTreeReaderValue<std::vector<TH1D>> fDistTimeVec = {fReaderCherPh_time, "time_dist"};
+  fReaderCherPh_time.SetTree("cherPhProp");
+  fReaderCherPh_time.SetEntry(0);
+  // get number of photons at aperture
+  auto nBinDist = distance->FindBin(dist);
+  //std::cout<<"nBinDist "<<nBinDist<<std::endl;
+  TH1D *timeHist = NULL;
+  timeHist = (TH1D*)((*fDistTimeVec)[nBinDist-1]).Clone();
+
+  //----------------------------------------------------------------------------------------
+  // Angle distribution
+  TTreeReader fReaderCherPh_angle;
+  TTreeReaderValue<std::vector<TH1D>> fDistAngleVec = {fReaderCherPh_angle, "angle_dist"};
+  fReaderCherPh_angle.SetTree("cherPhProp");
+  fReaderCherPh_angle.SetEntry(0);
+  TH1D *angleHist = NULL;
+  angleHist = (TH1D*)((*fDistAngleVec)[nBinDist-1]).Clone();
+
+  //----------------------------------------------------------------------------------------
+  copyHistogram(distance, _h1_distance, "_h1_distance", "_h1_distance", false, 1.0);
+  copyHistogram(wavelength, _h1_wavelength, "_h1_wavelength", "_h1_wavelength", false, wavelength->Integral(1,wavelength->GetNbinsX()));  
+  //
+  double nphotons_per_m2 = _h1_distance->GetBinContent((int)nBinDist);    
+  _nPhotonsPerM2 = nphotons_per_m2;
+  copyHistogram(timeHist,_h1_timeHist,"_h1_timeHist","_h1_timeHist",false,nphotons_per_m2);
+  copyHistogram(angleHist,_h1_angleHist,"_h1_angleHist","_h1_angleHist",false,nphotons_per_m2);
+  //
+  std::cout<<"nBinDist            "<<nBinDist<<std::endl
+	   <<"nphotons_per_m2     "<<nphotons_per_m2<<std::endl
+	   <<"timeHist int.       "<<timeHist->Integral(1,timeHist->GetNbinsX())<<std::endl
+	   <<"angleHist int.      "<<angleHist->Integral(1,angleHist->GetNbinsX())<<std::endl
+    	   <<"_h1_wavelength int. "<<_h1_wavelength->Integral(1,_h1_wavelength->GetNbinsX())<<std::endl
+	   <<"_h1_timeHist int.   "<<_h1_timeHist->Integral(1,_h1_timeHist->GetNbinsX())<<std::endl
+	   <<"_h1_angleHist int.  "<<_h1_angleHist->Integral(1,_h1_angleHist->GetNbinsX())<<std::endl;
+  
+  fIn->Close();
+}
+
+double terzina::generateDistFromHist(TH1D *h1, TRandom3 *rnd){
+  int nn = h1->GetNbinsX()+1;
+  int binI;
+  double val;
+  bool go = false;
+  double binL;
+  double binR;
+  while( go == false ){
+    binI = (int)rnd->Uniform(1,nn);
+    val = h1->GetBinContent(binI);
+    if(val>=rnd->Uniform()){
+      binL = h1->GetBinLowEdge(binI);
+      binR = binL + h1->GetBinWidth(binI);
+      go = true;
+      return rnd->Uniform(binL,binR);
+    }
+  }
+  return -999.0;
+}
+
+void terzina::copyHistogram(TH1D *h1, TH1D *h1_copy, TString h1_name_g, TString h1_title_g, bool ifBinsOnly, double norm){
+  TString h1_name = h1_name_g;
+  TString h1_title = h1_title_g;
+  h1_copy->SetName(h1_name.Data());
+  h1_copy->SetTitle(h1_title.Data());
+  const int n_bins_max = 1000;
+  double bins_low_edge[n_bins_max];
+  int nBins = h1->GetNbinsX();
+  if((nBins+1)>n_bins_max)
+    cout<<"ERROR --> (nBins+1)  > n_bins_max"<<endl
+	  <<"          nBins      = "<<nBins<<endl
+	  <<"          n_bins_max = "<<n_bins_max<<endl;
+  for(int i = 0;i<nBins;i++)
+    bins_low_edge[i] = h1->GetBinLowEdge(i+1);
+  bins_low_edge[nBins] = h1->GetBinLowEdge(nBins) + h1->GetBinWidth(nBins);
+  h1_copy->SetBins(nBins,bins_low_edge);
+  if(!ifBinsOnly && norm>0.0)
+    for(int i = 1;i<=nBins;i++)
+      h1_copy->SetBinContent(i,h1->GetBinContent(i)/norm);
 }

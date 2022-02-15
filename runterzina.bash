@@ -31,9 +31,10 @@ make -f Makefileterzina clean; make -f Makefileterzina runterzina;
 
 function printHelp {
     echo " --> ERROR in input arguments "
-    echo " [0] -d  : single root file"
-    echo " [0] -l  : list of root files"
-    echo " [0] -h  : print help"
+    echo " [0] -d      : single root file"
+    echo " [0] -l      : list of root files"
+    echo " [0] -shower : simulate shower"
+    echo " [0] -h      : print help"
 }
 
 if [ $# -eq 0 ] 
@@ -48,10 +49,47 @@ else
 	inRootFiles="../terzinag4-build/terzina.root"
 	outHistSingleF="./hist_GeomID11/hist_Proton_100PeV_525km_30km_0.0deg.root"
 	runterzina_single_root_file 1 $inRootFiles $outHistSingleF
+    elif [ "$1" = "-shower" ]; then
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="0.0"
+	#inRootFileG4="../terzinag4-build/terzina.root"
+	#outHistSingleF="./hist_GeomID11/hist_Proton_100PeV_525km_30km_0.0deg.root"
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="7.0"
+	#inRootFileG4="../terzinag4-build/terzina_Proton_100PeV_525km_30km_dist_7km.root"
+	#outHistSingleF="./hist_GeomID11/hist_terzina_Proton_100PeV_525km_30km_dist_7km.root"
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="7.0"
+	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta180deg.root"
+	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta180deg.root"
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="7.0"
+	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta177deg.root"
+	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta177deg.root"
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="7.0"
+	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta176.5deg.root"
+	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta176.5deg.root"
+	#
+	inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	distanceFromShowerAxis="7.0"
+	inRootFileG4="../terzinag4-build/terzina_bifocal_theta177deg_phi45deg.root"
+	outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta177deg_phi45deg.root"
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="7.0"
+	#inRootFileG4="../terzinag4-build/terzina_PSF_theta180deg.root"
+	#outHistSingleF="./hist_GeomID11/hist_terzina_PSF_theta180deg.root"
+	#
+	./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
     elif [ "$1" = "-l" ]; then
 	./runterzina 0 $rootFilesList $outHistF
         printHelp
-
     elif [ "$1" = "-h" ]; then
         printHelp
     else

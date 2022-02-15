@@ -39,17 +39,35 @@ int main(int argc, char *argv[]){
     terzina a( inRootFiles, atoi(argv[1]));
     a.Loop(outRootFileF);
   }
-  else if(argc == 4 && atoi(argv[1])==2){
-    // if else
+  else if(argc == 6 && atoi(argv[1])==2){
+    TString inRootFileWithShower = argv[2];
+    Double_t distanceFromShowerAxis = atof(argv[3]);
+    TString inRootFileWithG4sim = argv[4];
+    TString outRootFileF = argv[5];
+    cout<<"--> Parameter calculation from the WF <--"<<endl
+	<<"inRootFileWithShower   "<<inRootFileWithShower<<endl
+      	<<"distanceFromShowerAxis "<<distanceFromShowerAxis<<endl
+	<<"inRootFileWithG4sim    "<<inRootFileWithG4sim<<endl
+	<<"outRootFileF           "<<outRootFileF<<endl;
+    terzina a( inRootFileWithG4sim, atoi(argv[1]));
+    a.showerSim(inRootFileWithShower, distanceFromShowerAxis, outRootFileF);
   }
   else{
+    //------------------------------------------------
     cout<<" --> ERROR in input arguments "<<endl
 	<<" runID [1] = 0 (execution ID number)"<<endl
       	<<"       [2] - file with list of the root files"<<endl
 	<<"       [3] - name of root file with histograms"<<endl;
+    //------------------------------------------------
     cout<<" runID [1] = 1 (execution ID number)"<<endl
       	<<"       [2] - in root files"<<endl
 	<<"       [3] - name of root file with histograms"<<endl;
+    //------------------------------------------------
+    cout<<" runID [1] = 2 (execution ID number)"<<endl
+      	<<"       [2] - in root file with shower simulation"<<endl
+	<<"       [3] - distance from the axis of the shower (km)"<<endl
+      	<<"       [4] - in root file with Geant4 terzina simulation"<<endl
+	<<"       [5] - name of root file with histograms"<<endl;
   }
   return 0;
 }
