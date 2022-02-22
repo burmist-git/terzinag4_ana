@@ -479,8 +479,8 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
 	      if(if_lens(Wavelength[i],"DEFAULT",rnd)){
 		if(if_package_fill_factor("DEFAULT",rnd)){
 		  //if(Time[i]>3.01 && Time[i]<3.03){
-		  if(Time[i]>2.95 && Time[i]<3.1){
-		  //if(Time[i]>0.0 && Time[i]<100000){
+		  //if(Time[i]>2.95 && Time[i]<3.1){
+		  if(Time[i]>0.0 && Time[i]<100000){
 		    proj_plane_z0 = PosZ[i] + TMath::Sqrt(proj_plane_R*proj_plane_R -
 							  (PosX[i]*PosX[i] - proj_plane_x0*proj_plane_x0) -
 							  (PosY[i]*PosY[i] - proj_plane_y0*proj_plane_y0));
