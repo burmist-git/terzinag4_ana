@@ -27,14 +27,20 @@ printmakehelp_and_reminder: plots_effective_area.C Makefileterzina
 plots_SiPM_array: plots_SiPM_array.C
 	$(CXX) -DPLOTS_SIPM_ARRAY -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
-runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o
+runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o obj/CameraPlaneHist.o
 	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
+run_sim_camera: run_sim_camera.cpp obj/CameraPlaneHist.o
+	$(CXX) -o run_sim_camera run_sim_camera.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
 obj/terzina.o: src/terzina.cpp src/terzina.hh obj/terzinabase.o
 	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzina.o $<
 
 obj/terzinabase.o: src/terzinabase.cpp src/terzinabase.hh
 	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzinabase.o $<
+
+obj/CameraPlaneHist.o: src/CameraPlaneHist.cc src/CameraPlaneHist.hh
+	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)CameraPlaneHist.o $<
 
 clean:
 	rm -f runterzina

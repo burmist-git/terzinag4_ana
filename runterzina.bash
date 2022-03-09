@@ -51,57 +51,70 @@ else
 	runterzina_single_root_file 1 $inRootFiles $outHistSingleF
     elif [ "$1" = "-shower" ]; then
 	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="0.0"
-	#inRootFileG4="../terzinag4-build/terzina.root"
-	#outHistSingleF="./hist_GeomID11/hist_Proton_100PeV_525km_30km_0.0deg.root"
-	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_Proton_100PeV_525km_30km_dist_7km.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_Proton_100PeV_525km_30km_dist_7km.root"
-	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta180deg.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta180deg.root"
-	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta177deg.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta177deg.root"
-	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta176.5deg.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta176.5deg.root"
-	#
-	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_bifocal_theta177deg_phi45deg.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_bifocal_theta177deg_phi45deg.root"
-	#
 	inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
 	distanceFromShowerAxis="0.0"
-	inRootFileG4="../terzinag4-build/terzina_180deg.root"
-	outHistSingleF="./hist_GeomID11/hist_terzina_180deg.root"
+	theFile="terzina_PSF_CP_Flt_Theta180.0_phi0.0.root"
+	inRootFileG4="../terzinag4-build/$theFile"
+	outHistSingleF="./hist_GeomID11/hist_$theFile"
+	./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
 	#
 	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
 	#distanceFromShowerAxis="0.0"
-	#inRootFileG4="../terzinag4-build/terzina_0.0km.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_0.0km.root"
+	#theFile="terzina_PSF_CP_Flt_Theta179.5_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
 	#
 	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="7.0"
-	#inRootFileG4="../terzinag4-build/terzina_7.0km.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_7.0km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta179.0_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
 	#
 	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
-	#distanceFromShowerAxis="35.0"
-	#inRootFileG4="../terzinag4-build/terzina_35.0km.root"
-	#outHistSingleF="./hist_GeomID11/hist_terzina_35.0km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta178.5_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
 	#
-	./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta178.0_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta177.5_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta177.0_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#
+	#
+	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
+	#distanceFromShowerAxis="0.0"
+	#theFile="terzina_PSF_CP_Flt_Theta176.5_phi0.0.root"
+	#inRootFileG4="../terzinag4-build/$theFile"
+	#outHistSingleF="./hist_GeomID11/hist_$theFile"
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
+	#	
+	#./runterzina 2 $inRootFileShower $distanceFromShowerAxis $inRootFileG4 $outHistSingleF
     elif [ "$1" = "-l" ]; then
 	./runterzina 0 $rootFilesList $outHistF
         printHelp

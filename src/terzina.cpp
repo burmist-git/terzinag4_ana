@@ -1,5 +1,6 @@
 //my
 #include "terzina.hh"
+#include "CameraPlaneHist.hh"
 
 //root
 #include <TH2.h>
@@ -445,12 +446,17 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
   Int_t npe = 0;
   Long64_t nentries = fChain->GetEntriesFast();
   cout<<"nentries = "<<nentries<<endl;
+  Double_t weight = 1.0/nentries;
   Long64_t nbytes = 0, nb = 0;
   //
   Double_t proj_plane_R  = 300.0;
   Double_t proj_plane_x0 = 0.0;
   Double_t proj_plane_y0 = 0.0;
   Double_t proj_plane_z0 = 0.0;
+  //
+  CameraPlaneHist *cp_hist = new CameraPlaneHist("cp_hist", "cp_hist");
+  cp_hist->test();
+  assert(0);
   //
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
   //for (Long64_t jentry=0; jentry<1000;jentry++) {
@@ -485,7 +491,8 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
 							  (PosX[i]*PosX[i] - proj_plane_x0*proj_plane_x0) -
 							  (PosY[i]*PosY[i] - proj_plane_y0*proj_plane_y0));
 		    h1_proj_plane_z0->Fill(proj_plane_z0);
-		    if(proj_plane_z0>=170 && proj_plane_z0<=172){
+		    //if(proj_plane_z0>=170 && proj_plane_z0<=172){
+		    if(proj_plane_z0>=-10000 && proj_plane_z0<=10000){
 		      do{
 			//
 			//
@@ -498,6 +505,7 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
 			//
 			h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
 			//
+			cp_hist->Fill(PosX[i],PosY[i],weight);
 			npe++;
 		      }
 		      while(crosstalk(0.0,rnd));
@@ -539,6 +547,8 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
   h2_PosY_vs_PosX->Write();
   //
   h1_Wavelength->Write();
+  //
+  cp_hist->Write();
   //
   h1_npe->Write();
   //
