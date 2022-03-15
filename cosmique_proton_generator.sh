@@ -1,0 +1,3 @@
+rm cosmique_proton_generator
+make -f Makefileterzina cosmique_proton_generator
+time ./cosmique_proton_generator 0 1000000000 cosmique_proton_generator.root 1231231

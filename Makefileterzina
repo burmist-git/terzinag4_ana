@@ -27,6 +27,9 @@ printmakehelp_and_reminder: plots_effective_area.C Makefileterzina
 plots_SiPM_array: plots_SiPM_array.C
 	$(CXX) -DPLOTS_SIPM_ARRAY -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
+cosmique_proton_generator: cosmique_proton_generator.C
+	$(CXX) -DPLOTS_SIPM_ARRAY -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
 runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o obj/CameraPlaneHist.o
 	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
