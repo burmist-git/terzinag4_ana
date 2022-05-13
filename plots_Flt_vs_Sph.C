@@ -22,7 +22,8 @@ Int_t plots_Flt_vs_Sph(){
   Double_t psf_flt_arr[n];
   Double_t psf_spr_arr[n];
   //
-  Double_t frac = 57.1/3.5;
+  //Double_t frac = 57.1/3.5;
+  Double_t frac = 1.0;
   theta_arr[0] = 0.0*frac;
   theta_arr[1] = 0.5*frac;
   theta_arr[2] = 1.0*frac;
@@ -86,7 +87,7 @@ Int_t plots_Flt_vs_Sph(){
   gPad->SetGridy();
   //
   TMultiGraph *mg = new TMultiGraph();
-  mg->Add(gr_flt);
+  //mg->Add(gr_flt);
   mg->Add(gr_spr);
   mg->Draw("APL");
   mg->SetMinimum(0.0);
@@ -100,7 +101,7 @@ Int_t plots_Flt_vs_Sph(){
   TLegend *leg = new TLegend(0.6,0.6,0.9,0.9,"","brNDC");
   leg->AddEntry(gr_flt, "Flat", "pl");
   leg->AddEntry(gr_spr, "Spherical", "pl");
-  leg->Draw();
+  //leg->Draw();
   return 0;
 }
 
