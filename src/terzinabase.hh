@@ -56,10 +56,8 @@ protected :
   Double_t        primPosY;
   Double_t        primPosZ;
   Double_t        primTime;
-  Double_t        trigTopL;
-  Double_t        trigTopEdep;
-  Double_t        trigBotL;
-  Double_t        trigBotEdep;
+  Double_t        dedx_sipm;
+  Double_t        trackL_sipm;
   Int_t           nPhot;
   Int_t           TrackID[nChannels];   //[nPhot]
   Int_t           ParentID[nChannels];   //[nPhot]
@@ -106,10 +104,8 @@ protected :
   TBranch        *b_primPosY;   //!
   TBranch        *b_primPosZ;   //!
   TBranch        *b_primTime;   //!
-  TBranch        *b_trigTopL;   //!
-  TBranch        *b_trigTopEdep;   //!
-  TBranch        *b_trigBotL;   //!
-  TBranch        *b_trigBotEdep;   //!
+  TBranch        *b_dedx_sipm;   //!
+  TBranch        *b_trackL_sipm;   //!
   TBranch        *b_nPhot;   //!
   TBranch        *b_TrackID;   //!
   TBranch        *b_ParentID;   //!

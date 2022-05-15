@@ -1,3 +1,5 @@
+#undef NDEBUG
+
 //my
 #include "src/terzina.hh"
 
@@ -39,18 +41,20 @@ int main(int argc, char *argv[]){
     terzina a( inRootFiles, atoi(argv[1]));
     a.Loop(outRootFileF);
   }
-  else if(argc == 6 && atoi(argv[1])==2){
+  else if(argc == 7 && atoi(argv[1])==2){
     TString inRootFileWithShower = argv[2];
-    Double_t distanceFromShowerAxis = atof(argv[3]);
+    TString inDatFileShower = argv[3];
     TString inRootFileWithG4sim = argv[4];
-    TString outRootFileF = argv[5];
+    Double_t particleMomentum = atof(argv[5]);
+    TString outRootFileF = argv[6];
     cout<<"--> Parameter calculation from the WF <--"<<endl
-	<<"inRootFileWithShower   "<<inRootFileWithShower<<endl
-      	<<"distanceFromShowerAxis "<<distanceFromShowerAxis<<endl
-	<<"inRootFileWithG4sim    "<<inRootFileWithG4sim<<endl
-	<<"outRootFileF           "<<outRootFileF<<endl;
+	<<"inRootFileWithShower  "<<inRootFileWithShower<<endl
+      	<<"inDatFileShower       "<<inDatFileShower<<endl
+	<<"inRootFileWithG4sim   "<<inRootFileWithG4sim<<endl
+	<<"particleMomentum      "<<particleMomentum<<endl
+	<<"outRootFileF          "<<outRootFileF<<endl;
     terzina a( inRootFileWithG4sim, atoi(argv[1]));
-    a.showerSim(inRootFileWithShower, distanceFromShowerAxis, outRootFileF);
+    a.showerSim(inRootFileWithShower, inDatFileShower, particleMomentum, outRootFileF);
   }
   else{
     //------------------------------------------------
@@ -65,9 +69,10 @@ int main(int argc, char *argv[]){
     //------------------------------------------------
     cout<<" runID [1] = 2 (execution ID number)"<<endl
       	<<"       [2] - in root file with shower simulation"<<endl
-	<<"       [3] - distance from the axis of the shower (km)"<<endl
+	<<"       [3] - in dat file with trk parameters"<<endl
       	<<"       [4] - in root file with Geant4 terzina simulation"<<endl
-	<<"       [5] - name of root file with histograms"<<endl;
+      	<<"       [5] - proton track Ekin (PeV)"<<endl
+	<<"       [6] - name of root file with histograms"<<endl;
   }
   return 0;
 }

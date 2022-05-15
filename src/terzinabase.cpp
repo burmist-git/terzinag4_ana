@@ -180,10 +180,8 @@ void terzinabase::Init(TTree *tree){
    fChain->SetBranchAddress("primPosY", &primPosY, &b_primPosY);
    fChain->SetBranchAddress("primPosZ", &primPosZ, &b_primPosZ);
    fChain->SetBranchAddress("primTime", &primTime, &b_primTime);
-   fChain->SetBranchAddress("trigTopL", &trigTopL, &b_trigTopL);
-   fChain->SetBranchAddress("trigTopEdep", &trigTopEdep, &b_trigTopEdep);
-   fChain->SetBranchAddress("trigBotL", &trigBotL, &b_trigBotL);
-   fChain->SetBranchAddress("trigBotEdep", &trigBotEdep, &b_trigBotEdep);
+   fChain->SetBranchAddress("dedx_sipm", &dedx_sipm, &b_dedx_sipm);
+   fChain->SetBranchAddress("trackL_sipm", &trackL_sipm, &b_trackL_sipm);
    fChain->SetBranchAddress("nPhot", &nPhot, &b_nPhot);
    fChain->SetBranchAddress("TrackID", TrackID, &b_TrackID);
    fChain->SetBranchAddress("ParentID", ParentID, &b_ParentID);

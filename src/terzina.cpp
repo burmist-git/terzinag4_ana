@@ -1,6 +1,7 @@
 //my
 #include "terzina.hh"
 #include "CameraPlaneHist.hh"
+#include "sim_trk_info_str.hh"
 
 //root
 #include <TH2.h>
@@ -30,6 +31,37 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
+terzina::terzina(TString fileList) : terzinabase(fileList)
+{
+  _nPhotonsPerM2 = 0;
+  _particleMomentum = 0.0;
+  _ThetaAngle_offset = 0.0;
+  _ThetaAngle_mean_without_offset = 0.0;
+  _ThetaAngle_RMS = 0.0;
+  _time_offset = 0.0;
+  _time_mean_without_offset = 0.0;
+  _time_RMS = 0.0;
+  _DistanceFromTheAxisOfTheShower = 0.0;
+  _nPhotonsPerM2_scaled_100PeV = 0.0;
+}
+
+terzina::terzina(TString file, Int_t key) : terzinabase(file, key)
+{
+  _nPhotonsPerM2 = 0;
+  _particleMomentum = 0.0;
+  _ThetaAngle_offset = 0.0;
+  _ThetaAngle_mean_without_offset = 0.0;
+  _ThetaAngle_RMS = 0.0;
+  _time_offset = 0.0;
+  _time_mean_without_offset = 0.0;
+  _time_RMS = 0.0;
+  _DistanceFromTheAxisOfTheShower = 0.0;
+  _nPhotonsPerM2_scaled_100PeV = 0.0;
+}
+
+terzina::~terzina(){
+}
 
 void terzina::Loop(TString histOut){
   //
@@ -197,7 +229,7 @@ void terzina::Loop(TString histOut){
 	  h1_photPathLen->Fill(photPathLen[i]);
 	  //
 	  h1_PosX->Fill(PosX[i]);
-	  h1_PosY->Fill(PosY[i]);
+ 	  h1_PosY->Fill(PosY[i]);
 	  h1_PosZ->Fill(PosZ[i]);
 	  h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
 	  h2_PosY_vs_PosX_forzoom->Fill(PosX[i],PosY[i]);
@@ -370,8 +402,8 @@ Bool_t terzina::if_mirror(Double_t wl, TString mirror_ID, TRandom3 *rnd){
 Bool_t terzina::if_lens(Double_t wl, TString lens_ID, TRandom3 *rnd){
   Double_t prob_val;
   if(lens_ID == "DEFAULT"){
-    prob_val = 0.95*0.95;
-    //prob_val = 1.0;
+    //prob_val = 0.95*0.95;
+    prob_val = 1.0;
     if(rnd->Uniform()<=prob_val)
       return true;
     return false;
@@ -400,13 +432,16 @@ Bool_t terzina::crosstalk(Double_t prob, TRandom3 *rnd){
   return false;
 }
 
-void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowerAxis, TString outRootFileF){
+void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF){
   //
-  readEventFormRootFile(inRootFileWithShower, distanceFromShowerAxis);
-  std::cout<<"_nPhotonsPerM2      "<<_nPhotonsPerM2<<std::endl
-    	   <<"_h1_wavelength int. "<<_h1_wavelength->Integral(1,_h1_wavelength->GetNbinsX())<<std::endl
-	   <<"_h1_timeHist int.   "<<_h1_timeHist->Integral(1,_h1_timeHist->GetNbinsX())<<std::endl
-	   <<"_h1_angleHist int.  "<<_h1_angleHist->Integral(1,_h1_angleHist->GetNbinsX())<<std::endl;  
+  _trk_info = new sim_trk_info_str();
+  _h1_particle_per_year = new TH1D();
+  //
+  readEventFormRootFile_newFormat(inRootFileWithShower, inDatFileShower, particleMomentum);
+  //std::cout<<"_nPhotonsPerM2      "<<_nPhotonsPerM2<<std::endl
+  //	   <<"_h1_wavelength int. "<<_h1_wavelength->Integral(1,_h1_wavelength->GetNbinsX())<<std::endl
+  //	   <<"_h1_timeHist int.   "<<_h1_timeHist->Integral(1,_h1_timeHist->GetNbinsX())<<std::endl
+  //	   <<"_h1_angleHist int.  "<<_h1_angleHist->Integral(1,_h1_angleHist->GetNbinsX())<<std::endl;  
   _gr_QE_NUVHD = new TGraph();
   _gr_mirror_Reflectance_Unpolarized = new TGraph();
   read_Eff_vs_wl("PDE_NUVHD_3.90V_Pxt_15.dat",_gr_QE_NUVHD,"_gr_QE_NUVHD");
@@ -455,13 +490,13 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
   Double_t proj_plane_z0 = 0.0;
   //
   CameraPlaneHist *cp_hist = new CameraPlaneHist("cp_hist", "cp_hist");
-  cp_hist->test();
-  assert(0);
+  //cp_hist->test();
+  //assert(0);
   //
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-  //for (Long64_t jentry=0; jentry<1000;jentry++) {
-  //Long64_t jentry_in=100;
-  //for (Long64_t jentry=jentry_in; jentry<(jentry_in+1);jentry++) {
+    //for (Long64_t jentry=0; jentry<1000;jentry++) {
+    //Long64_t jentry_in=100;
+    //for (Long64_t jentry=jentry_in; jentry<(jentry_in+1);jentry++) {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -471,6 +506,7 @@ void terzina::showerSim(TString inRootFileWithShower, Double_t distanceFromShowe
     //if(primMomX>0)
     //thetaPhotons = -thetaPhotons;
     //thetaPhotons_deg = (thetaPhotons*180.0/TMath::Pi());
+    //
     h1_nPhot->Fill(nPhot);
     h1_primPosX->Fill(primPosX);
     h1_primPosY->Fill(primPosY);
@@ -752,4 +788,177 @@ void terzina::copyHistogram(TH1D *h1, TH1D *h1_copy, TString h1_name_g, TString 
   if(!ifBinsOnly && norm>0.0)
     for(int i = 1;i<=nBins;i++)
       h1_copy->SetBinContent(i,h1->GetBinContent(i)/norm);
+}
+
+void terzina::readEventFormRootFile_newFormat( TString inRootFileName_g4s, TString inTrkDataFile_g4s, Double_t particleMomentum){
+  //
+  _h1_distance = new TH1D();
+  _h1_wavelength = new TH1D();
+  _h1_timeHist = new TH1D();
+  _h1_angleHist = new TH1D();
+  //
+  _h1_distance->SetName("_h1_distance");
+  _h1_wavelength->SetName("_h1_wavelength");
+  _h1_timeHist->SetName("_h1_timeHist");
+  _h1_angleHist->SetName("_h1_angleHist");
+  //
+  _h1_distance->SetTitle("_h1_distance");
+  _h1_wavelength->SetTitle("_h1_wavelength");
+  _h1_timeHist->SetTitle("_h1_timeHist");
+  _h1_angleHist->SetTitle("_h1_angleHist");
+  //
+  _particleMomentum = particleMomentum;
+  //
+  TString inTrkDataFile = inTrkDataFile_g4s;
+  TString mot;
+  //
+  cout<<"inRootFileName_g4s "<<inRootFileName_g4s<<endl
+      <<"inTrkDataFile      "<<inTrkDataFile<<endl;
+  //
+  //trk info
+  std::ifstream trkDataFile(inTrkDataFile.Data());
+  if (trkDataFile.is_open()) {
+    trkDataFile>>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+	       >>mot
+    	       >>mot;
+    trkDataFile>>_trk_info->theta
+	       >>_trk_info->phi
+	       >>_trk_info->x_int
+	       >>_trk_info->y_int
+	       >>_trk_info->z_int
+	       >>_trk_info->xe0
+	       >>_trk_info->ye0
+	       >>_trk_info->ze0
+	       >>_trk_info->distToEarth
+	       >>_trk_info->distToTerzina
+	       >>_trk_info->angleTrzinaTrk
+	       >>_trk_info->nphotons_per_m2;
+    trkDataFile.close();
+  }
+  else {
+    cout << "Unable to open file"<<endl; 
+    assert(0);
+  }
+  //_trk_info->printInfo();
+  //assert(0);
+
+  TString inRootFileName = inRootFileName_g4s;
+  TFile *f1 = new TFile(inRootFileName.Data());
+
+  TH1D *h1_wavelength = (TH1D*)f1->Get("wl");
+  TH1D *h1_distance = (TH1D*)f1->Get("r");
+  TH1D *h1_angle_offset = (TH1D*)f1->Get("ang_off");
+  TH1D *h1_time_offset = (TH1D*)f1->Get("t_off");
+  //double _ThetaAngle_mean_without_offset;
+  //double _ThetaAngle_RMS;
+  //double _time_mean_without_offset;
+  //double _time_RMS;
+
+  copyHistogram(h1_wavelength, _h1_wavelength, "h1_wavelength", "h1_wavelength", false, 1.0);
+  copyHistogram(h1_distance, _h1_distance, "h1_distance", "h1_distance", false, 1.0);
+
+  //assert(0);
+
+  auto nBinDist = h1_distance->FindBin(_trk_info->distToTerzina);
+  //auto nBinDist = h1_distance->FindBin(5);
+  
+  //
+  TString angle_dist_name = "ang_dist_";
+  angle_dist_name += nBinDist;
+  //
+  TString time_dist_name = "t_dist_";
+  time_dist_name += nBinDist;
+
+  //
+  //G4cout<<"nBinDist        "<<nBinDist<<G4endl
+  //	<<"time_dist_name  "<<time_dist_name<<G4endl
+  //	<<"angle_dist_name "<<angle_dist_name<<G4endl;
+  //
+  
+  if(!f1->GetListOfKeys()->Contains(angle_dist_name.Data())){ 
+    cout<<"Distance bin does not exist "<<endl;
+    assert(0);
+  }
+  //  
+  TH1D *h1_angle_dist = (TH1D*)f1->Get(angle_dist_name.Data());
+  TH1D *h1_time_dist = (TH1D*)f1->Get(time_dist_name.Data());
+  //
+  //h1_angle_dist->SaveAs("h1_angle_dist.C");
+  //
+  copyHistogram(h1_angle_dist, _h1_angleHist, "h1_angleHist", "h1_angleHist", false, getMaximumHistCount(h1_angle_dist));
+  //copyHistogram(h1_angle_dist, _h1_angleHist, "h1_angleHist", "h1_angleHist", false, 1.0);
+  copyHistogram(h1_time_dist, _h1_timeHist, "h1_timeHist", "h1_timeHist", false, getMaximumHistCount(h1_time_dist));
+  //
+  //h1_angle_dist->SaveAs("_h1_angleHist.C");
+  //
+  _nPhotonsPerM2_scaled_100PeV = _h1_distance->GetBinContent(nBinDist)*_particleMomentum/100.0;
+  _nPhotonsPerM2 = _nPhotonsPerM2_scaled_100PeV;
+  _ThetaAngle_offset = h1_angle_offset->GetBinContent(nBinDist);
+  _time_offset = h1_time_offset->GetBinContent(nBinDist);
+  //
+  _ThetaAngle_mean_without_offset = _h1_angleHist->GetMean();
+  _ThetaAngle_RMS = _h1_angleHist->GetRMS();
+  _time_mean_without_offset = _h1_angleHist->GetMean();
+  _time_RMS = _h1_timeHist->GetRMS();
+  //  
+  f1->Close();
+  //
+  //_trk_info->printInfo();
+  //
+  //cout<<"_particleName     "<<_particleName<<endl
+  // 	<<"_particleMomentum "<<_particleMomentum<<endl
+  // 	<<"_PhiAngle         "<<_PhiAngle<<endl
+  // 	<<"_ThetaAngle       "<<_ThetaAngle<<endl;
+  //
+  //cout<<"_ThetaAngle_offset               "<<_ThetaAngle_offset<<endl
+  //	<<"_ThetaAngle_mean_without_offset  "<<_ThetaAngle_mean_without_offset<<endl
+  //	<<"_ThetaAngle_RMS                  "<<_ThetaAngle_RMS<<endl
+  //	<<"_time_offset                     "<<_time_offset<<endl
+  //	<<"_time_mean_without_offset        "<<_time_mean_without_offset<<endl
+  //	<<"_time_RMS                        "<<_time_RMS<<endl
+  //	<<"_DistanceFromTheAxisOfTheShower  "<<_DistanceFromTheAxisOfTheShower<<endl
+  //	<<"_nPhotonsPerM2                   "<<_nPhotonsPerM2<<endl
+  //	<<"_nPhotonsPerM2_scaled_100PeV     "<<_nPhotonsPerM2_scaled_100PeV<<endl;
+  //
+  //assert(0);
+  //  
+  //TFile* rootFile = new TFile("test.root", "RECREATE", " Histograms", 1);
+  //rootFile->cd();
+  //_h1_wavelength->Write();
+  //_h1_distance->Write();
+  //_h1_angleHist->Write();
+  //_h1_timeHist->Write();
+  //rootFile->Close();  
+  //
+  if(_nPhotonsPerM2<=0){
+    cout<<"photon density is low ~ 0 per m^2"<<endl;
+    assert(0);
+  }
+  ////////////////////////
+  TFile *f1_cosmique_particle_spectrum = new TFile("../terzinag4/cosmique_particle_spectrum.root");
+  f1_cosmique_particle_spectrum->cd();
+  cout<<"f1_cosmique_particle_spectrum"<<endl;
+  TH1D *h1_particle_per_year = (TH1D*)f1_cosmique_particle_spectrum->Get("h1_particle_per_year");
+  copyHistogram(h1_particle_per_year, _h1_particle_per_year, "h1_particle_per_year", "h1_particle_per_year", false, 1.0);
+  f1_cosmique_particle_spectrum->Close();
+  ////////////////////////
+}
+
+double terzina::getMaximumHistCount(TH1D *h1){
+  int nn = h1->GetNbinsX()+1;
+  double maxVal = -999.0;
+  for(Int_t iiii = 1;iiii<=nn;iiii++){
+    if(maxVal<h1->GetBinContent(iiii))
+      maxVal = h1->GetBinContent(iiii);
+  }
+  return maxVal;
 }
