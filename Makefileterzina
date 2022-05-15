@@ -13,7 +13,7 @@ OUTLIB = ./obj/
 
 #----------------------------------------------------#
 
-all: runterzina	plots_SiPM_array
+all: runterzina	plots_SiPM_array merge_hist_files
 
 .PHONY: printmakehelp_and_reminder
 printmakehelp_and_reminder: plots_effective_area.C Makefileterzina
@@ -29,6 +29,9 @@ plots_SiPM_array: plots_SiPM_array.C
 
 cosmique_proton_generator: cosmique_proton_generator.C
 	$(CXX) -DPLOTS_SIPM_ARRAY -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
+merge_hist_files: merge_hist_files.cpp
+	$(CXX) -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
 runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o obj/CameraPlaneHist.o
 	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
@@ -47,6 +50,8 @@ obj/CameraPlaneHist.o: src/CameraPlaneHist.cc src/CameraPlaneHist.hh
 
 clean:
 	rm -f runterzina
+	rm -f merge_hist_files
+	rm -f plots_SiPM_array
 	rm -f *~
 	rm -f src/*~
 	rm -f $(OUTLIB)*.o
