@@ -6,10 +6,11 @@ n_jobs=544
 
 function printHelp {
     echo " --> ERROR in input arguments "
-    echo " [0] -d    : default - simulation with terzinag4"
-    echo " [0] -info : print info"
-    echo " [0] -kill : kill all jobs"
-    echo " [0] -h    : print help"
+    echo " [0] -d         : default - simulation with terzinag4"
+    echo " [0] -info      : print info"
+    echo " [0] -infoshort : print short info"
+    echo " [0] -kill      : kill all jobs"
+    echo " [0] -h         : print help"
 }
 
 if [ $# -eq 0 ] 
@@ -24,6 +25,11 @@ else
     elif [ "$1" = "-info" ]; then
 	squeue | head -n 1
 	squeue | grep burmistr
+    elif [ "$1" = "-infoshort" ]; then
+	totnjobs=$(source $anaHomeDir/runterzina_sbatch.sh -info | wc -l)
+	cpunjobs=$(source $anaHomeDir/runterzina_sbatch.sh -info | grep cpu |wc -l)
+	echo "totnjobs = $totnjobs"
+	echo "cpunjobs = $cpunjobs"
     elif [ "$1" = "-kill" ]; then
 	scancel --user=burmistr --state=pending
 	scancel --user=burmistr --state=CG

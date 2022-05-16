@@ -1,10 +1,12 @@
 #!/bin/sh
 
 anaHomeDir="/home/users/b/burmistr/terzina_photon_propagation/terzinag4_ana/"
+mergRootDir="./merg_hist"
 
 function printHelp {
     echo " --> ERROR in input arguments "
     echo " [0] -d    : default - merge all Enegry bins "
+    echo " [0] -s    : merge single Enegry bins "
     echo " [0] -info : print info"
     echo " [0] -kill : kill all jobs"
     echo " [0] -h    : print help"
@@ -15,17 +17,16 @@ then
     printHelp
 else
     if [ "$1" = "-d" ]; then
-	#for ekin in $(ls ../root/); do
-	#ekin_in_PeV=${ekin:0:-3}
-	#echo $ekin
-	#echo "$ekin_in_PeV"
-	ekin_in_PeV=10
+	for ekin in $(ls ../root/); do
+	    ekin_in_PeV=${ekin:0:-3}
+	    echo $ekin
+	    echo "$ekin_in_PeV"
+	    sbatch $anaHomeDir/merge_hist_files_job.sh -d 0 $mergRootDir/merg_hist_$ekin.root $ekin_in_PeV
+	done
+    elif [ "$1" = "-s" ]; then
+	ekin_in_PeV=3000
 	ekin=$ekin_in_PeV"PeV"
-	sbatch $anaHomeDir/merge_hist_files_job.sh -d 0 merg_hist_$ekin.root $ekin_in_PeV
-	ekin_in_PeV=1000
-	ekin=$ekin_in_PeV"PeV"
-	sbatch $anaHomeDir/merge_hist_files_job.sh -d 0 merg_hist_$ekin.root $ekin_in_PeV
-	#done
+	sbatch $anaHomeDir/merge_hist_files_job.sh -d 0 $mergRootDir/merg_hist_$ekin.root $ekin_in_PeV
     elif [ "$1" = "-info" ]; then
 	squeue | head -n 1
 	squeue | grep burmistr

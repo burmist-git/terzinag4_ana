@@ -26,7 +26,14 @@ else
         if [ $# -eq 2 ]; then
 	    #
 	    jobID=$2
-	    energyBin=100
+	    energyBin=10   #10PeV     ok
+	    #energyBin=35   #35PeV     ok
+	    #energyBin=70   #70PeV     ok
+	    #energyBin=100  #100PeV    ok
+	    #energyBin=350  #350PeV    ok    
+	    #energyBin=700  #700PeV    ok
+	    #energyBin=1000 #1000PeV   ok 
+	    #energyBin=3000 #3000PeV   ok
 	    eKin=$energyBin
 	    #
             inRootFileG4_dir="../root/$energyBin""PeV/$jobID"
