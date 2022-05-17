@@ -1,0 +1,31 @@
+ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
+ROOTLIBS      = $(shell $(ROOTSYS)/bin/root-config --libs)
+ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
+
+CXX  = g++
+CXX += -I./	
+CXX += -I./obj/
+
+CXXFLAGS  = -g -Wall -fPIC -Wno-deprecated
+CXXFLAGS += $(ROOTCFLAGS)
+
+OUTLIB = ./obj/
+
+#----------------------------------------------------#
+
+all: runmgrana	
+
+runmgrana: runmgrana.cpp obj/mgrana.o obj/mgranabase.o
+	$(CXX) -o runmgrana runmgrana.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+
+obj/mgrana.o: src/mgrana.cpp src/mgrana.hh obj/mgranabase.o
+	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)mgrana.o $<
+
+obj/mgranabase.o: src/mgranabase.cpp src/mgranabase.hh
+	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)mgranabase.o $<
+
+clean:
+	rm -f runmgrana
+	rm -f *~
+	rm -f src/*~
+	rm -f $(OUTLIB)*.o
