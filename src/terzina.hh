@@ -27,6 +27,7 @@ public:
 
   void Loop(TString histOut);
   void showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF);
+  void bkgSim(TString outRootFileF);
   void readEventFormRootFile(TString inRootFileName_g4s, Double_t distanceFromTheAxisOfTheShower);
   void readEventFormRootFile_newFormat( TString inRootFileName_g4s, TString inTrkDataFile_g4s, Double_t particleMomentum);
   double generateDistFromHist(TH1D *h1, TRandom3 *rnd);  

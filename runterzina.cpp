@@ -40,6 +40,7 @@ int main(int argc, char *argv[]){
 	<<"outRootFileF  : "<<outRootFileF<<endl;
     terzina a( inRootFiles, atoi(argv[1]));
     a.Loop(outRootFileF);
+    //a.bkgSim(outRootFileF);
   }
   else if(argc == 7 && atoi(argv[1])==2){
     TString inRootFileWithShower = argv[2];
@@ -55,6 +56,15 @@ int main(int argc, char *argv[]){
 	<<"outRootFileF          "<<outRootFileF<<endl;
     terzina a( inRootFileWithG4sim, atoi(argv[1]));
     a.showerSim(inRootFileWithShower, inDatFileShower, particleMomentum, outRootFileF);
+  }
+  else if(argc == 4 && atoi(argv[1])==3){
+    TString rootFilesList = argv[2];
+    TString outRootFileF = argv[3];
+    cout<<"--> Parameter calculation from the WF <--"<<endl
+	<<"rootFilesList : "<<rootFilesList<<endl
+	<<"outRootFileF  : "<<outRootFileF<<endl;
+    terzina a(rootFilesList);
+    a.bkgSim(outRootFileF);
   }
   else{
     //------------------------------------------------
@@ -73,6 +83,10 @@ int main(int argc, char *argv[]){
       	<<"       [4] - in root file with Geant4 terzina simulation"<<endl
       	<<"       [5] - proton track Ekin (PeV)"<<endl
 	<<"       [6] - name of root file with histograms"<<endl;
+    //------------------------------------------------
+    cout<<" runID [1] = 3 (background analysis)"<<endl
+      	<<"       [2] - file with list of the root files"<<endl
+	<<"       [3] - name of root file with histograms"<<endl;
   }
   return 0;
 }

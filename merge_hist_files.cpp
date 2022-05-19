@@ -13,6 +13,7 @@
 #include "TTreeReaderValue.h"
 
 //C, C++
+#include <sys/stat.h>
 #include <iostream>
 #include <stdlib.h>
 #include <assert.h>
@@ -100,18 +101,22 @@ int main(int argc, char *argv[]){
     TString  fileName;
     TString  hist_fileName;
     for(Int_t i = 0;i<110000;i++){
-    //for(Int_t i = 0;i<100;i++){
+      //for(Int_t i = 0;i<100;i++){
       eventID = i;
       fileName = getTrkInfoFileName(eventID);
       hist_fileName = get_hist_root_FileName(eventID, Ekin_in_PeV_str);
-      cout<<fileName<<endl
-	  <<hist_fileName<<endl;
-      if(i%1000==0)
+      if(i%1000==0){
 	cout<<i<<endl;
+	cout<<fileName<<endl
+	    <<hist_fileName<<endl;
+      }
       if(file_exists_test(fileName)){
 	readDatTrkFile(fileName.Data(), theta, phi, x_int, y_int, z_int, xe0, ye0, ze0, distToEarth, distToTerzina, angleTrzinaTrk, nphotons_per_m2);
 	if(file_exists_test(hist_fileName)){
 	  readHistG4File(hist_fileName.Data(), nPhot_mean, npe_mean, npe_th);
+	  //cout<<fileName<<endl
+	  //  <<hist_fileName<<endl
+	  //   <<nphotons_per_m2<<endl;
 	  //cout<<"nPhot_mean "<<nPhot_mean<<endl
 	  //  <<"npe_mean   "<<npe_mean<<endl
 	  //  <<"npe_th[9]  "<<npe_th[9]<<endl;
@@ -189,6 +194,12 @@ TString get_hist_root_FileName(Int_t eventIDmy, TString ekin_str){
   return fileName;
 }
 
+bool file_exists_test (TString inFileName) {
+  struct stat buffer;   
+  return (stat (inFileName.Data(), &buffer) == 0); 
+}
+
+/*
 bool file_exists_test(TString inFileName){
   if (FILE *file = fopen(inFileName.Data(), "r")) {
     fclose(file);
@@ -198,6 +209,7 @@ bool file_exists_test(TString inFileName){
   }  
   return false;
 }
+*/
 
 void readDatTrkFile(TString fileName, Double_t &theta, Double_t &phi, 
 		    Double_t &x_int, Double_t &y_int, Double_t &z_int, 
@@ -240,5 +252,6 @@ void readHistG4File(TString hist_fileName, Double_t &nPhot_mean, Double_t &npe_m
   //
   for(Int_t i = 0;i<=10;i++)
     npe_th[i] = h1_2->Integral(h1_2->FindBin(i+1),h1_2->GetEntries());
+  f1->Close();
 }
 

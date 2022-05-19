@@ -598,6 +598,123 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   rootFile->Close();
 }
 
+void terzina::bkgSim(TString outRootFileF){
+  _gr_QE_NUVHD = new TGraph();
+  cout<<"_gr_QE_NUVHD"<<endl;
+  read_Eff_vs_wl("PDE_NUVHD_3.90V_Pxt_15.dat",_gr_QE_NUVHD,"_gr_QE_NUVHD");
+  //
+  TRandom3 *rnd = new TRandom3(2342342);
+  //
+  Int_t i = 0;
+  //
+  TH1D *h1_nPhot = new TH1D("h1_nPhot","nPhot",400,0,400);
+  TH1D *h1_npe = new TH1D("h1_npe","n p.e.",400,0,400);
+  //
+  TH1D *h1_PosX = new TH1D("h1_PosX","PosX",5000,-100,100);
+  TH1D *h1_PosY = new TH1D("h1_PosY","PosY",5000,-100,100);
+  TH1D *h1_PosZ = new TH1D("h1_PosZ","PosZ",5000,-100,100);
+  //
+  TH1D *h1_Time = new TH1D("h1_Time","Time",10000,0,10);
+  //
+  TH1D *h1_Wavelength = new TH1D("h1_Wavelength","Wavelength",1000,200,1100);
+  //
+  TH2D *h2_PosY_vs_PosX = new TH2D("h2_PosY_vs_PosX","PosY vs PosX",1000,-100,100,1000,-100,100);
+  //
+  TH1D *h1_dedx_sipm = new TH1D("h1_dedx_sipm","dedx sipm",10000,0,400);
+  TH1D *h1_trackL_sipm = new TH1D("h1_trackL_sipm","trackL sipm",10000,0,400);
+  //
+  TH1D *h1_dedx_sipm_zoom = new TH1D("h1_dedx_sipm_zoom","dedx sipm zoom",10000,0,40);
+  TH1D *h1_trackL_sipm_zoom = new TH1D("h1_trackL_sipm_zoom","trackL sipm zoom",10000,0,40);
+  //
+  TH1D *h1_dedx_sipm_zoom_zoom = new TH1D("h1_dedx_sipm_zoom_zoom","dedx sipm zoom zoom",10000,0,4);
+  TH1D *h1_trackL_sipm_zoom_zoom = new TH1D("h1_trackL_sipm_zoom_zoom","trackL sipm zoom zoom",10000,0,4);
+  //
+  Int_t npe = 0;
+  Long64_t nentries = fChain->GetEntriesFast();
+  cout<<"nentries = "<<nentries<<endl;
+  Long64_t nbytes = 0, nb = 0;
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+    //for (Long64_t jentry=0; jentry<1000;jentry++) {
+    //Long64_t jentry_in=100;
+    //for (Long64_t jentry=jentry_in; jentry<(jentry_in+1);jentry++) {
+    Long64_t ientry = LoadTree(jentry);
+    if (ientry < 0) break;
+    nb = fChain->GetEntry(jentry);   nbytes += nb;
+    //
+    //if(nPhot>0.0)
+    h1_nPhot->Fill(nPhot);
+    //if(dedx_sipm>0.0){
+    h1_dedx_sipm->Fill(dedx_sipm);
+    h1_dedx_sipm_zoom->Fill(dedx_sipm);
+    h1_dedx_sipm_zoom_zoom->Fill(dedx_sipm);
+    //}
+    //if(trackL_sipm>0.0){
+    h1_trackL_sipm->Fill(trackL_sipm);
+    h1_trackL_sipm_zoom->Fill(trackL_sipm);
+    h1_trackL_sipm_zoom_zoom->Fill(trackL_sipm);
+    //}
+    //
+    if(nPhot>0){
+      npe = 0;
+      for(i = 0;i<nPhot;i++){
+	if(ifQE(Wavelength[i],"NUVHD",rnd)){
+	  if(Time[i]>0.0 && Time[i]<100000){
+	      do{
+		//
+		//
+		h1_PosX->Fill(PosX[i]);
+		h1_PosY->Fill(PosY[i]);
+		h1_PosZ->Fill(PosZ[i]);
+		//
+		h1_Time->Fill(Time[i]);
+		h1_Wavelength->Fill(Wavelength[i]);
+		//
+		h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
+		//
+		npe++;
+	      }
+	      while(crosstalk(0.0,rnd));
+	    }
+	}
+      }
+      h1_npe->Fill(npe);
+    }
+  }
+  ///////////////////
+  TFile* rootFile = new TFile(outRootFileF.Data(), "RECREATE", " Histograms", 1);
+  rootFile->cd();
+  if (rootFile->IsZombie()){
+    cout<<"  ERROR ---> file "<<outRootFileF.Data()<<" is zombi"<<endl;
+    assert(0);
+  }
+  else
+    cout<<"  Output Histos file ---> "<<outRootFileF.Data()<<endl;
+  //
+  h1_nPhot->Write();
+  h1_Time->Write();
+  //
+  h1_PosX->Write();
+  h1_PosY->Write();
+  h1_PosZ->Write();
+  //
+  h2_PosY_vs_PosX->Write();
+  //
+  h1_Wavelength->Write();
+  //
+  h1_npe->Write();
+  //
+  h1_dedx_sipm->Write();
+  h1_trackL_sipm->Write();
+  //
+  h1_dedx_sipm_zoom->Write();
+  h1_trackL_sipm_zoom->Write();
+  //
+  h1_dedx_sipm_zoom_zoom->Write();
+  h1_trackL_sipm_zoom_zoom->Write();
+  //
+  rootFile->Close();
+}
+
 void terzina::readEventFormRootFile(TString inRootFileName_g4s, Double_t distanceFromTheAxisOfTheShower){
   //
   _h1_distance = new TH1D();
