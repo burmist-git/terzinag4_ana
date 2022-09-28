@@ -29,6 +29,7 @@ function printHelp {
     echo " [0] -l          : list of root files"
     echo " [0] -shower     : simulate shower"
     echo " [0] -showertest : simulate shower new (on yggdrasil)"
+    echo " [0] -NGBtest    : NGB simulation test"
     echo " [0] -h          : print help"
 }
 
@@ -66,6 +67,13 @@ else
 	eKin=100
 	outHistSingleF="./hist_EASCherSim_0048790_g4.root"
 	./runterzina 2 $inRootFileShower $inDatFileShower $inRootFileG4 $eKin $outHistSingleF
+    elif [ "$1" = "-NGBtest" ]; then
+	inRootFileNGB="../terzinag4/NGB.root"
+	inDatFileNGB="../terzinag4/NGB.dat"
+	inRootFileG4="../root_NGB/NGB_0.189deg_00100.root"
+	eKin=100
+	outHistSingleF="../hist_root_NGB/hist_NGB_0.189deg_00100.root"
+	./runterzina 2 $inRootFileNGB $inDatFileNGB $inRootFileG4 $eKin $outHistSingleF
     elif [ "$1" = "-l" ]; then
 	./runterzina 0 $rootFilesList $outHistF
         printHelp
