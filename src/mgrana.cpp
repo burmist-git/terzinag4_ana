@@ -34,6 +34,11 @@ void mgrana::Loop(TString histOut){
   TH1D *h1_nPhot_mean = new TH1D("h1_nPhot_mean","nPhot mean",1000,0.0,1000);
   TH1D *h1_npe_mean = new TH1D("h1_npe_mean","h1_npe_mean",1000,0.0,200);
   TH1D *h1_npe_th = new TH1D("h1_npe_th","nPhot mean",12,-0.5,11.5);
+  TH1D *h1_distToEarth = new TH1D("h1_distToEarth","distToEarth",100,0.0,100.0);
+  TH1D *h1_distToEarth_cut = new TH1D("h1_distToEarth_cut","distToEarth cut",100,0.0,50.0);
+  TH1D *h1_distToTerzina = new TH1D("h1_distToTerzina","distToTerzina",80,0.0,40.0);
+  TH1D *h1_distToTerzina_cut = new TH1D("h1_distToTerzina_cut","distToTerzina cut",80,0.0,40.0);
+  //
   TGraph *gr_npe_th = new TGraph();
   gr_npe_th->SetName("gr_npe_th");
   gr_npe_th->SetTitle("gr_npe_th");
@@ -49,8 +54,14 @@ void mgrana::Loop(TString histOut){
     h1_nphotons_per_m2->Fill(nphotons_per_m2);
     h1_nPhot_mean->Fill(nPhot_mean);
     h1_npe_mean->Fill(npe_mean);
+    h1_distToEarth->Fill(distToEarth);
+    h1_distToEarth_cut->Fill(distToEarth,npe_th[6]/1000.0/108591.0);
+    h1_distToTerzina->Fill(distToTerzina);
+    h1_distToTerzina_cut->Fill(distToTerzina,npe_th[6]/1000.0/108591.0);
     for(i = 0;i<10;i++)
       h1_npe_th->Fill(i+1,npe_th[i]/1000.0/108591.0);
+    if(npe_th[6]>100 && distToTerzina> 14.9 && distToTerzina<15.1)
+      cout<<eventID<<endl;
   }
   TFile* rootFile = new TFile(histOut.Data(), "RECREATE", " Histograms", 1);
   rootFile->cd();
@@ -72,6 +83,12 @@ void mgrana::Loop(TString histOut){
   h1_nPhot_mean->Write();
   h1_npe_mean->Write();
   h1_npe_th->Write();
+  //
+  h1_distToEarth->Write();
+  h1_distToEarth_cut->Write();
+  //
+  h1_distToTerzina->Write();
+  h1_distToTerzina_cut->Write();
   //
   gr_npe_th->Write();
   //

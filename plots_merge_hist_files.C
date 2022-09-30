@@ -13,6 +13,7 @@
 using namespace std;
 
 Double_t getLogLog_spline(TGraphErrors *gr1, Double_t el_in_PeV);
+Double_t getLogLog_and_lin_spline(TGraphErrors *gr_eff_vs_e, Double_t e_In_PeV);
 Double_t log_log_spline(Double_t x1, Double_t y1, Double_t x2, Double_t y2, Double_t el_in_PeV);
 void copyHistogram(TH1D *h1, TH1D *h1_copy, TString h1_name_g, TString h1_title_g, bool ifBinsOnly, double norm);
 
@@ -38,14 +39,20 @@ Int_t plots_merge_hist_files(){
   TFile *f1[n];
   TGraph *gr1[n];
   TH1D *h1[n];
+  TH1D *h1_distToEarth_cut[n];
+  TH1D *h1_distToEarth_cut_tot = new TH1D("h1_distToEarth_cut_tot","distToEarth cut tot",100,0.0,50.0);
+  TH1D *h1_distToTerzina_cut[n];
+  TH1D *h1_distToTerzina_cut_tot = new TH1D("h1_distToTerzina_cut_tot","distToTerzina cut tot",80,0.0,40.0);
   for(Int_t i = 0;i<8;i++){
    f1[i] = new TFile(fileNarr[i].Data());
    h1[i] = (TH1D*)f1[i]->Get("h1_npe_th");
+   h1_distToEarth_cut[i] = (TH1D*)f1[i]->Get("h1_distToEarth_cut");
+   h1_distToTerzina_cut[i] = (TH1D*)f1[i]->Get("h1_distToTerzina_cut");
    gr1[i] = (TGraph*)f1[i]->Get("gr_npe_th");
   }
   //
   //
-  fileNarr[7]="./merg_hist/hist_merg_hist_3000PeV.root";
+  //fileNarr[7]="./merg_hist/hist_merg_hist_3000PeV.root";
   //  
   //
   TFile *f1_cos_par_spec = new TFile("cosmique_particle_spectrum.root");
@@ -77,14 +84,12 @@ Int_t plots_merge_hist_files(){
   //h1[0]->SetMaximum(0.5);
   //h1[0]->SetMinimum(1.0e-8);
   //
-
   for(Int_t i = 0;i<n;i++){
     gr1[i]->SetLineWidth(3.0);
     gr1[i]->SetLineColor(kBlack);
     gr1[i]->SetMarkerStyle(20);
     gr1[i]->SetMarkerColor(kBlack);
   }
-
   //
   gr1[0]->SetMarkerStyle(6);
   gr1[0]->SetLineColor(kBlack);
@@ -130,7 +135,7 @@ Int_t plots_merge_hist_files(){
   //mg->SetMaximum(5.0);
   mg->GetXaxis()->SetTitle("# p.e.");
   mg->GetYaxis()->SetTitle("efficiency");
-
+  //
   TLegend *leg = new TLegend(0.6,0.6,0.9,0.9,"","brNDC");
   leg->AddEntry(gr1[0], "10   PeV", "pl");
   leg->AddEntry(gr1[1], "35   PeV", "pl");
@@ -141,7 +146,7 @@ Int_t plots_merge_hist_files(){
   leg->AddEntry(gr1[6], "1000 PeV", "pl");
   leg->AddEntry(gr1[7], "3000 PeV", "pl");
   leg->Draw();
-
+  //
   //
   TCanvas *c2 = new TCanvas("c2","c2",10,10,1200,800);
   gStyle->SetPalette(1);
@@ -207,13 +212,12 @@ Int_t plots_merge_hist_files(){
   //
   gr_eff_vs_e->SetTitle("");
   gr_eff_vs_e->Draw("APL");
-
+  //
   gr_eff_vs_e->GetXaxis()->SetTitle("Energy, PeV");
   gr_eff_vs_e->GetYaxis()->SetTitle("efficiency");
-
+  //
   //gPad->SetGridx();
   //gPad->SetGridy();
-
   //////////
 
   /*
@@ -246,7 +250,6 @@ Int_t plots_merge_hist_files(){
   Double_t loge;
   Double_t el;
   ///////////////////
-
 
   ///////////////////
   Int_t nn = 1000;
@@ -329,7 +332,8 @@ Int_t plots_merge_hist_files(){
     //	<<"e_In_PeV "<<e_In_PeV<<endl;
     //
     if(e_In_PeV<3000){
-      eff = getLogLog_spline(gr_eff_vs_e,e_In_PeV);
+      //eff = getLogLog_spline(gr_eff_vs_e,e_In_PeV);
+      eff = getLogLog_and_lin_spline(gr_eff_vs_e,e_In_PeV);
       h1_particle_per_year_eff->SetBinContent(i,h1_particle_per_year->GetBinContent(i)*eff);
       eff = gr_eff_vs_e->Eval(e_In_PeV);
       h1_particle_per_year_eff_lin->SetBinContent(i,h1_particle_per_year->GetBinContent(i)*eff);
@@ -349,7 +353,7 @@ Int_t plots_merge_hist_files(){
   gStyle->SetPalette(1);
   gStyle->SetFrameBorderMode(0);
   gROOT->ForceStyle();
-  //gStyle->SetOptStat(kFALSE);
+  gStyle->SetOptStat(kFALSE);
   //
   c4->SetRightMargin(0.01);
   c4->SetLeftMargin(0.08);
@@ -374,16 +378,141 @@ Int_t plots_merge_hist_files(){
 
   h1_particle_per_year_tot->Draw();
   h1_particle_per_year_eff->Draw("sames");
-  h1_particle_per_year_eff_lin->Draw("sames");
+  //h1_particle_per_year_eff_lin->Draw("sames");
 
   h1_particle_per_year_tot->GetXaxis()->SetTitle("Energy, GeV");
   h1_particle_per_year_tot->GetYaxis()->SetTitle("Number of events during 3 years");
   
   TLegend *leg04 = new TLegend(0.6,0.3,0.9,0.6,"","brNDC");
   leg04->AddEntry(h1_particle_per_year_tot, "Total", "l");
-  leg04->AddEntry(h1_particle_per_year_eff, "Log log interpolation","l");
-  leg04->AddEntry(h1_particle_per_year_eff_lin, "Linear interpolation", "l");
+  leg04->AddEntry(h1_particle_per_year_eff, "Log - linear interpolation","l");
+  //leg04->AddEntry(h1_particle_per_year_eff_lin, "Linear interpolation", "l");
   leg04->Draw();
+  //
+  //----------------------------------
+  //
+  TCanvas *c5 = new TCanvas("c5","c5",10,10,800,800);
+  gStyle->SetPalette(1);
+  gStyle->SetFrameBorderMode(0);
+  gROOT->ForceStyle();
+  //gStyle->SetOptStat(kFALSE);
+  //
+  c5->SetRightMargin(0.02);
+  c5->SetLeftMargin(0.1);
+  c5->SetTopMargin(0.01);
+  c5->SetBottomMargin(0.08);
+  //h1_particle_per_year_eff->Draw();  
+  //  
+  cout<<100<<" "<<h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(100*1.0e+6))<<endl;
+  Double_t val = 0;
+  Double_t ww = 0;
+  Double_t ee_in_pev = 0;
+  for(Int_t ii = 1;ii<=h1_distToEarth_cut_tot->GetNbinsX();ii++){
+    //val = h1_distToEarth_cut_tot->GetBinContent(ii);
+    //
+    val = 0.0;
+    //10
+    ee_in_pev = 10;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val = h1_distToEarth_cut[0]->GetBinContent(ii)*ww;
+    //35
+    ee_in_pev = 35;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[1]->GetBinContent(ii)*ww;
+    //70
+    ee_in_pev = 70;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[2]->GetBinContent(ii)*ww;
+    //100
+    ee_in_pev = 100;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[3]->GetBinContent(ii)*ww;
+    //350
+    ee_in_pev = 350;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[4]->GetBinContent(ii)*ww;
+    //700
+    ee_in_pev = 700;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[5]->GetBinContent(ii)*ww;
+    //1000
+    ee_in_pev = 1000;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[6]->GetBinContent(ii)*ww;
+    //1000
+    ee_in_pev = 3000;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToEarth_cut[7]->GetBinContent(ii)*ww;
+    //
+    h1_distToEarth_cut_tot->SetBinContent(ii,val);
+  }
+  h1_distToEarth_cut_tot->SetTitle("");
+  h1_distToEarth_cut_tot->SetLineColor(kBlack);
+  h1_distToEarth_cut_tot->SetLineWidth(3.0);
+  h1_distToEarth_cut_tot->Draw();
+  h1_distToEarth_cut_tot->GetXaxis()->SetTitle("Altitude, km");
+  ////////////////////////////////////////////////////////////////////  
+  //cout<<h1_distToEarth_cut_tot->Integral("width");
+
+  //
+  //----------------------------------
+  //
+  TCanvas *c6 = new TCanvas("c6","c6",10,10,800,800);
+  gStyle->SetPalette(1);
+  gStyle->SetFrameBorderMode(0);
+  gROOT->ForceStyle();
+  //gStyle->SetOptStat(kFALSE);
+  //
+  c6->SetRightMargin(0.02);
+  c6->SetLeftMargin(0.1);
+  c6->SetTopMargin(0.01);
+  c6->SetBottomMargin(0.08);
+  //
+  for(Int_t ii = 1;ii<=h1_distToTerzina_cut_tot->GetNbinsX();ii++){
+    //val = h1_distToEarth_cut_tot->GetBinContent(ii);
+    //
+    val = 0.0;
+    //10
+    ee_in_pev = 10;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val = h1_distToTerzina_cut[0]->GetBinContent(ii)*ww;
+    //35
+    ee_in_pev = 35;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[1]->GetBinContent(ii)*ww;
+    //70
+    ee_in_pev = 70;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[2]->GetBinContent(ii)*ww;
+    //100
+    ee_in_pev = 100;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[3]->GetBinContent(ii)*ww;
+    //350
+    ee_in_pev = 350;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[4]->GetBinContent(ii)*ww;
+    //700
+    ee_in_pev = 700;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[5]->GetBinContent(ii)*ww;
+    //1000
+    ee_in_pev = 1000;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[6]->GetBinContent(ii)*ww;
+    //1000
+    ee_in_pev = 3000;
+    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
+    val += h1_distToTerzina_cut[7]->GetBinContent(ii)*ww;
+    //
+    h1_distToTerzina_cut_tot->SetBinContent(ii,val);
+  }
+  h1_distToTerzina_cut_tot->SetTitle("");
+  h1_distToTerzina_cut_tot->SetLineColor(kBlack);
+  h1_distToTerzina_cut_tot->SetLineWidth(3.0);
+  h1_distToTerzina_cut_tot->Draw();
+  h1_distToTerzina_cut_tot->GetXaxis()->SetTitle("Distance to Terzina, km");
+  ////////////////////////////////////////////////////////////////////  
   
   return 0;
 }
@@ -398,6 +527,26 @@ Double_t getLogLog_spline(TGraphErrors *gr1, Double_t el_in_PeV){
     gr1->GetPoint(i+1,x2,y2);
     if(el_in_PeV>=x1 && el_in_PeV<=x2)
       return log_log_spline(x1,y1,x2,y2,el_in_PeV);
+  }
+  return 0.5e-8;
+}
+
+Double_t getLogLog_and_lin_spline(TGraphErrors *gr1, Double_t e_In_PeV){
+  Double_t x1;
+  Double_t y1;
+  Double_t x2;
+  Double_t y2;
+  //
+  Double_t x_lin_window_min = 100;//PeV
+  Double_t x_lin_window_max = 400;//PeV
+  //
+  for(Int_t i = 0;i<(gr1->GetN()-1);i++){
+    gr1->GetPoint(i,x1,y1);
+    gr1->GetPoint(i+1,x2,y2);
+    if(e_In_PeV>=x_lin_window_min && e_In_PeV<=x_lin_window_max)
+      return gr1->Eval(e_In_PeV);      
+    if(e_In_PeV>=x1 && e_In_PeV<=x2)
+      return log_log_spline(x1,y1,x2,y2,e_In_PeV);
   }
   return 0.5e-8;
 }
