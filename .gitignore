@@ -33,3 +33,12 @@ merg_hist/
 run_sim_camera.root
 run_sim_camera_flt.root
 run_sim_camera_spr.root
+cosmique_proton_generator
+cosmique_proton_generator.root
+hist_EASCherSim_0008227_g4.root
+hist_EASCherSim_0048790_g4.root
+hist_e-_Ekin_0.20MeV.root
+merg_hist.root
+merg_hist_1000PeV.root
+merg_hist_100PeV.root
+merg_hist_10PeV.root
