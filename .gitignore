@@ -4,7 +4,6 @@
 obj
 data
 hist
-*.root
 runterzina
 plots_SiPM_array
 plots_SiPM_array.C.tmp
@@ -28,3 +27,9 @@ hist_small_pat/
 run_sim_camera
 merge_hist_files
 runmgrana
+Proton_100PeV_525km_30km.root
+hist_GeomID11/
+merg_hist/
+run_sim_camera.root
+run_sim_camera_flt.root
+run_sim_camera_spr.root
