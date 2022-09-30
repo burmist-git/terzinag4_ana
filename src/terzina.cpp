@@ -522,31 +522,31 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
 		if(if_package_fill_factor("DEFAULT",rnd)){
 		  //if(Time[i]>3.01 && Time[i]<3.03){
 		  //if(Time[i]>2.95 && Time[i]<3.1){
-		  if(Time[i]>0.0 && Time[i]<100000){
-		    proj_plane_z0 = PosZ[i] + TMath::Sqrt(proj_plane_R*proj_plane_R -
-							  (PosX[i]*PosX[i] - proj_plane_x0*proj_plane_x0) -
-							  (PosY[i]*PosY[i] - proj_plane_y0*proj_plane_y0));
-		    h1_proj_plane_z0->Fill(proj_plane_z0);
-		    //if(proj_plane_z0>=170 && proj_plane_z0<=172){
-		    if(proj_plane_z0>=-10000 && proj_plane_z0<=10000){
-		      do{
-			//
-			//
-			h1_PosX->Fill(PosX[i]);
-			h1_PosY->Fill(PosY[i]);
-			h1_PosZ->Fill(PosZ[i]);
-			//
-			h1_Time->Fill(Time[i]);
-			h1_Wavelength->Fill(Wavelength[i]);
-			//
-			h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
-			//
-			cp_hist->Fill(PosX[i],PosY[i],weight);
-			npe++;
-		      }
-		      while(crosstalk(0.0,rnd));
-		    }
-		  }
+		  //if(Time[i]>0.0 && Time[i]<100000){
+		  proj_plane_z0 = PosZ[i] + TMath::Sqrt(proj_plane_R*proj_plane_R -
+							(PosX[i]*PosX[i] - proj_plane_x0*proj_plane_x0) -
+							(PosY[i]*PosY[i] - proj_plane_y0*proj_plane_y0));
+		  h1_proj_plane_z0->Fill(proj_plane_z0);
+		  //if(proj_plane_z0>=170 && proj_plane_z0<=172){
+		  //if(proj_plane_z0>=-10000 && proj_plane_z0<=10000){
+		  //do{
+		  //
+		  //
+		  h1_PosX->Fill(PosX[i]);
+		  h1_PosY->Fill(PosY[i]);
+		  h1_PosZ->Fill(PosZ[i]);
+		  //
+		  h1_Time->Fill(Time[i]);
+		  h1_Wavelength->Fill(Wavelength[i]);
+		  //
+		  h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
+		  //
+		  cp_hist->Fill(PosX[i],PosY[i],weight);
+		  npe++;
+		  //}
+		  //while(crosstalk(0.0,rnd));
+		  //}
+		  //}
 		}
 	      }
 	    }
@@ -891,7 +891,7 @@ void terzina::copyHistogram(TH1D *h1, TH1D *h1_copy, TString h1_name_g, TString 
   TString h1_title = h1_title_g;
   h1_copy->SetName(h1_name.Data());
   h1_copy->SetTitle(h1_title.Data());
-  const int n_bins_max = 1000;
+  const int n_bins_max = 2000;
   double bins_low_edge[n_bins_max];
   int nBins = h1->GetNbinsX();
   if((nBins+1)>n_bins_max)
