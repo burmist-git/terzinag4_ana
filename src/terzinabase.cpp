@@ -26,6 +26,11 @@
 
 using namespace std;
 
+terzinabase::terzinabase() : fChain(0)
+{
+  cout<<"terzinabase::terzinabase()"<<endl;
+}
+
 terzinabase::terzinabase(TString fileList) : fChain(0) 
 {
   ifstream indata;
@@ -231,4 +236,8 @@ Int_t terzinabase::Cut(Long64_t entry){
   // returns  1 if entry is accepted.
   // returns -1 otherwise.
   return 1;
+}
+
+void terzinabase::testlocal(){
+  std::cout<<"terzinabase::testlocal()"<<std::endl;
 }

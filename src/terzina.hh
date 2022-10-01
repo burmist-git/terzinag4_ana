@@ -20,10 +20,10 @@ struct sim_trk_info_str;
 class terzina: public terzinabase {
 public:
 
+  terzina();
   terzina(TString fileList);
   terzina(TString file, Int_t key);
   ~terzina();
-
 
   void Loop(TString histOut);
   void showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF);

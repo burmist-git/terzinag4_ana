@@ -30,6 +30,7 @@ function printHelp {
     echo " [0] -shower     : simulate shower"
     echo " [0] -showertest : simulate shower new (on yggdrasil)"
     echo " [0] -NGBtest    : NGB simulation test"
+    echo " [0] -simpletest : simple terzina-class test"
     echo " [0] -h          : print help"
 }
 
@@ -41,6 +42,8 @@ else
 	inRootFiles="../terzinag4-build/terzina.root"
 	outHistSingleF="./hist_GeomID11/hist_Proton_100PeV_525km_30km_0.0deg.root"
 	runterzina_single_root_file 1 $inRootFiles $outHistSingleF
+    elif [ "$1" = "-simpletest" ]; then
+	./runterzina 4
     elif [ "$1" = "-shower" ]; then
 	#inRootFileShower="../terzinag4-build/Proton_100PeV_525km_30km.root"
 	#distanceFromShowerAxis="0.0"

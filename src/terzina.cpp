@@ -3,6 +3,14 @@
 #include "CameraPlaneHist.hh"
 #include "sim_trk_info_str.hh"
 
+#include "libtempl.h"
+//wfsim
+//#include "wfSim.hh"
+//#include "wfSimConfStr.hh"
+//#include "sipmAvalancheTree.hh"
+//#include "genSiPMwf.hh"
+//#include "wfParametrisationStr.hh"
+
 //root
 #include <TH2.h>
 #include <TStyle.h>
@@ -31,6 +39,12 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
+terzina::terzina()
+{
+  cout<<"terzina::terzina()"<<endl;
+  templ::test();
+}
 
 terzina::terzina(TString fileList) : terzinabase(fileList)
 {
@@ -471,7 +485,7 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   //
   TH1D *h1_Time = new TH1D("h1_Time","Time",10000,0,10);
   //
-  TH1D *h1_Wavelength = new TH1D("h1_Wavelength","Wavelength",1000,200,1100);
+  TH1D *h1_Wavelength_ph = new TH1D("h1_Wavelength_ph","Wavelength photons",1000,200,1100);
   //
   TH2D *h2_primPosY_vs_primPosX = new TH2D("h2_primPosY_vs_primPosX","primPosY vs primPosX",400,-400,400,400,-400,400);
   TH2D *h2_PosY_vs_PosX = new TH2D("h2_PosY_vs_PosX","PosY vs PosX",1000,-100,100,1000,-100,100);
@@ -537,7 +551,7 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
 		  h1_PosZ->Fill(PosZ[i]);
 		  //
 		  h1_Time->Fill(Time[i]);
-		  h1_Wavelength->Fill(Wavelength[i]);
+		  h1_Wavelength_ph->Fill(Wavelength[i]);
 		  //
 		  h2_PosY_vs_PosX->Fill(PosX[i],PosY[i]);
 		  //
@@ -553,6 +567,10 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
 	  }
 	}
       }
+      /////////////////
+      //wfSim *wf = new wfSim();
+      //delete wf;
+      /////////////////
       h1_npe->Fill(npe);
     }
   }
@@ -582,7 +600,7 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   h2_primPosY_vs_primPosX->Write();
   h2_PosY_vs_PosX->Write();
   //
-  h1_Wavelength->Write();
+  h1_Wavelength_ph->Write();
   //
   cp_hist->Write();
   //

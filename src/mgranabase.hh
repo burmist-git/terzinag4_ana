@@ -87,7 +87,8 @@ protected :
                  Int_t Nbin, Float_t Vmin, Float_t Vmax);
   double getUnixTimeFromTime(double d_year, double d_month, double d_day, double d_hour, double d_min, double d_sec);  
   //
-  
+  void hist2Dnorm(TH2D *h2, TH2D *h2norm);  
+  //  
 };
 
 #endif

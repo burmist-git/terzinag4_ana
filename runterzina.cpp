@@ -66,6 +66,11 @@ int main(int argc, char *argv[]){
     terzina a(rootFilesList);
     a.bkgSim(outRootFileF);
   }
+  else if(argc == 2 && atoi(argv[1])==4){
+    cout<<"--> test <--"<<endl;
+    terzina a = terzina();
+    a.testlocal();
+  }
   else{
     //------------------------------------------------
     cout<<" --> ERROR in input arguments "<<endl
@@ -87,6 +92,7 @@ int main(int argc, char *argv[]){
     cout<<" runID [1] = 3 (background analysis)"<<endl
       	<<"       [2] - file with list of the root files"<<endl
 	<<"       [3] - name of root file with histograms"<<endl;
+    cout<<" runID [1] = 4 (simple test)"<<endl;
   }
   return 0;
 }

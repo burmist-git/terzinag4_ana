@@ -2,12 +2,17 @@ ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
 ROOTLIBS      = $(shell $(ROOTSYS)/bin/root-config --libs)
 ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
 
+PACSHAREDINC  = ../package_shared_library_installation_c/install.00.00.01/	
+
 CXX  = g++
 CXX += -I./	
 CXX += -I./obj/
+CXX += -I$(PACSHAREDINC)
 
 CXXFLAGS  = -g -Wall -fPIC -Wno-deprecated
+CXXFLAGS += -L$(PACSHAREDINC) -ltempl
 CXXFLAGS += $(ROOTCFLAGS)
+CXXFLAGS += -std=c++14
 
 OUTLIB = ./obj/
 
@@ -34,13 +39,13 @@ merge_hist_files: merge_hist_files.cpp
 	$(CXX) -o $@ $^ $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
 runterzina: runterzina.cpp obj/terzina.o obj/terzinabase.o obj/CameraPlaneHist.o
-	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
+	$(CXX) -o runterzina runterzina.cpp $(OUTLIB)*.o $(CXXFLAGS) $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
 run_sim_camera: run_sim_camera.cpp obj/CameraPlaneHist.o
 	$(CXX) -o run_sim_camera run_sim_camera.cpp $(OUTLIB)*.o $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 
 obj/terzina.o: src/terzina.cpp src/terzina.hh obj/terzinabase.o
-	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzina.o $<
+	       $(CXX) -L. $(CXXFLAGS) -c -I. -o $(OUTLIB)terzina.o  $<
 
 obj/terzinabase.o: src/terzinabase.cpp src/terzinabase.hh
 	$(CXX) $(CXXFLAGS) -c -I. -o $(OUTLIB)terzinabase.o $<

@@ -121,6 +121,25 @@ double mgranabase::getUnixTimeFromTime(double d_year, double d_month, double d_d
   return difftime(mktime(&y2k),0);
 }
 
+void mgranabase::hist2Dnorm(TH2D *h2, TH2D *h2norm){
+  Int_t nx = h2->GetNbinsX();
+  Int_t ny = h2->GetNbinsY();
+  //cout<<"nx "<<nx<<endl
+  //  <<"ny "<<ny<<endl;
+  Double_t norm;
+  Double_t val;
+  for(Int_t i = 1;i<=nx;i++){
+    for(Int_t j = 1;j<=ny;j++){
+      norm = h2norm->GetBinContent(i,j);
+      val  = h2->GetBinContent(i,j);
+      if(norm>0)
+	h2->SetBinContent(i,j,val/norm);
+      else
+	h2->SetBinContent(i,j,0);
+    }
+  }
+}
+
 mgranabase::~mgranabase(){
    if (!fChain) return;
    delete fChain->GetCurrentFile();

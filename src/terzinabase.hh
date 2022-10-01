@@ -16,6 +16,7 @@ class TProfile;
 class terzinabase {
 
 public :
+  terzinabase();
   terzinabase(TString fileList);
   terzinabase(TString inFileName, Int_t keyID);
   ~terzinabase();
@@ -26,6 +27,7 @@ public :
   Bool_t Notify();
   void Show(Long64_t entry = -1);
   Int_t Cut(Long64_t entry);
+  void testlocal();
 
 protected :
   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
