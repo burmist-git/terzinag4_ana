@@ -13,6 +13,9 @@
 #include "genSiPMwf.hh"
 #include "wfParametrisationStr.hh"
 
+//wfana
+#include "waveform.hh"
+
 //root
 #include <TH2.h>
 #include <TStyle.h>
@@ -47,7 +50,9 @@ terzina::terzina()
   cout<<"terzina::terzina()"<<endl;
   templ::test();
   wfSim *wf = new wfSim(); 
+  waveform *wfana = new waveform();
   delete wf;
+  delete wfana;
 }
 
 terzina::terzina(TString fileList) : terzinabase(fileList)
@@ -450,7 +455,7 @@ Bool_t terzina::crosstalk(Double_t prob, TRandom3 *rnd){
   return false;
 }
 
-void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF){
+void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF, TString wfSim_Terzina_conf){
   //
   _trk_info = new sim_trk_info_str();
   _h1_particle_per_year = new TH1D();
@@ -477,7 +482,7 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   Int_t i = 0;
   //
   TH1D *h1_nPhot = new TH1D("h1_nPhot","nPhot",400,0,400);
-  TH1D *h1_npe = new TH1D("h1_npe","n p.e.",400,0,400);
+  TH1D *h1_npe = new TH1D("h1_npe","n p.e.",401,-0.5,400.5);
   //
   TH1D *h1_primPosX = new TH1D("h1_primPosX","primPosX",1000,-400,400);
   TH1D *h1_primPosY = new TH1D("h1_primPosY","primPosY",1000,-400,400);
@@ -510,6 +515,20 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   CameraPlaneHist *cp_hist = new CameraPlaneHist("cp_hist", "cp_hist");
   //cp_hist->test();
   //assert(0);
+  //
+  wfSimConfStr *wfConf = new wfSimConfStr();
+  //wfSimConfStr *wfConf = new wfSimConfStr();
+  wfConf->readFromFile(wfSim_Terzina_conf);
+  //wfConf->printInfo();
+  //assert(0);
+  //
+  wfSim *wf = new wfSim(rnd,wfConf);
+  wf->getWF_tmpl(wfConf->Template);
+  //
+  Int_t i_jentry = 0;
+  TString gr_NameTitle = "gr_wf_sig_only_";
+  //
+  std::vector<TGraph*> wfSim_vec;
   //
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
     //for (Long64_t jentry=0; jentry<1000;jentry++) {
@@ -572,10 +591,20 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
 	}
       }
       /////////////////
+      TGraph *gr_wf = new TGraph();
+      TGraph *gr_wf_sig = new TGraph();
+      TGraph *gr_wf_sig_only = new TGraph();
+      gr_NameTitle = "gr_wf_sig_only_";
+      gr_NameTitle += i_jentry;
+      gr_wf_sig_only->SetNameTitle(gr_NameTitle.Data(),gr_NameTitle.Data());
+      wf->gen_WF( gr_wf, gr_wf_sig, gr_wf_sig_only, npe,  _h1_timeHist);
+      wfSim_vec.push_back(gr_wf_sig_only);
       //wfSim *wf = new wfSim();
       //delete wf;
       /////////////////
       h1_npe->Fill(npe);
+      i_jentry++;
+      //delete gr_wf_sig_only;
     }
   }
   ///////////////////
@@ -587,6 +616,9 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   }
   else
     cout<<"  Output Histos file ---> "<<outRootFileF.Data()<<endl;
+  //
+  for(unsigned int ii = 0;ii<wfSim_vec.size();ii++)
+    wfSim_vec.at(ii)->Write();
   //
   h1_nPhot->Write();
   h1_Time->Write();

@@ -84,6 +84,7 @@ function printHelp {
     echo " [1]          : root file list"
     echo " [2]          : output root file with histograms"
     echo " [0] -bkglist : list creation for background files"
+    echo " [0] -compile : compile"
     echo " [0] -h       : print help"
 }
 
@@ -109,6 +110,7 @@ else
 	    inRootFileShower_dir="/home/users/b/burmistr/easchersim/root/$jobID"
 	    inDatFileShower_dir=$inRootFileShower_dir
 	    outHistSingleF_dir="../hist_root/$energyBin""PeV/$jobID"
+	    wfSim_Terzina_conf="wfSim_Terzina_25um_conv_fit_40MHz_filter_signal.conf"
 	    #
 	    mkdir -p $outHistSingleF_dir
 	    for inRootFileG4 in $(ls -l $inRootFileG4_dir/*.root | awk {'print $9'}) ; do
@@ -122,18 +124,23 @@ else
 		inDatFileShower=$inDatFileShower_dir/"trkInfo_"$eventID".dat"
 		outHistSingleF=$outHistSingleF_dir/"hist_"$eventID"_g4.root"
 		#
-		echo "eventID          = $eventID"
-		echo "inRootFileG4     = $inRootFileG4"
-		echo "inRootFileShower = $inRootFileShower"
-		echo "inDatFileShower  = $inDatFileShower"
-		echo "eKin             = $eKin"
-		echo "outHistSingleF   = $outHistSingleF"
+		echo "eventID            = $eventID"
+		echo "inRootFileG4       = $inRootFileG4"
+		echo "inRootFileShower   = $inRootFileShower"
+		echo "inDatFileShower    = $inDatFileShower"
+		echo "eKin               = $eKin"
+		echo "outHistSingleF     = $outHistSingleF"
+		echo "wfSim_Terzina_conf = $wfSim_Terzina_conf"
 		#
-		srun $terzina_ana_HomeDir/runterzina 2 $inRootFileShower $inDatFileShower $inRootFileG4 $eKin $outHistSingleF
+		#srun $terzina_ana_HomeDir/runterzina 2 $inRootFileShower $inDatFileShower $inRootFileG4 $eKin $outHistSingleF $wfSim_Terzina_conf
+		#$terzina_ana_HomeDir/runterzina 2 $inRootFileShower $inDatFileShower $inRootFileG4 $eKin $outHistSingleF $wfSim_Terzina_conf
+		echo "$terzina_ana_HomeDir/runterzina 2 $inRootFileShower $inDatFileShower $inRootFileG4 $eKin $outHistSingleF $wfSim_Terzina_conf"
 	    done
 	else
             printHelp
 	fi
+    elif [ "$1" = "-compile" ]; then
+	make -f Makefileterzina clean; make -f Makefileterzina runterzina;
     elif [ "$1" = "-bkg" ]; then
         if [ $# -eq 3 ]; then
 	    #

@@ -42,20 +42,22 @@ int main(int argc, char *argv[]){
     a.Loop(outRootFileF);
     //a.bkgSim(outRootFileF);
   }
-  else if(argc == 7 && atoi(argv[1])==2){
+  else if(argc == 8 && atoi(argv[1])==2){
     TString inRootFileWithShower = argv[2];
     TString inDatFileShower = argv[3];
     TString inRootFileWithG4sim = argv[4];
     Double_t particleMomentum = atof(argv[5]);
     TString outRootFileF = argv[6];
+    TString wfSim_Terzina_conf = argv[7];
     cout<<"--> Parameter calculation from the WF <--"<<endl
 	<<"inRootFileWithShower  "<<inRootFileWithShower<<endl
       	<<"inDatFileShower       "<<inDatFileShower<<endl
 	<<"inRootFileWithG4sim   "<<inRootFileWithG4sim<<endl
 	<<"particleMomentum      "<<particleMomentum<<endl
-	<<"outRootFileF          "<<outRootFileF<<endl;
+	<<"outRootFileF          "<<outRootFileF<<endl
+	<<"wfSim_Terzina_conf    "<<wfSim_Terzina_conf<<endl;
     terzina a( inRootFileWithG4sim, atoi(argv[1]));
-    a.showerSim(inRootFileWithShower, inDatFileShower, particleMomentum, outRootFileF);
+    a.showerSim(inRootFileWithShower, inDatFileShower, particleMomentum, outRootFileF, wfSim_Terzina_conf);
   }
   else if(argc == 4 && atoi(argv[1])==3){
     TString rootFilesList = argv[2];

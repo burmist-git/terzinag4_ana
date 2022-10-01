@@ -26,7 +26,7 @@ public:
   ~terzina();
 
   void Loop(TString histOut);
-  void showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF);
+  void showerSim(TString inRootFileWithShower, TString inDatFileShower, Double_t particleMomentum, TString outRootFileF, TString wfSim_Terzina_conf);
   void bkgSim(TString outRootFileF);
   void readEventFormRootFile(TString inRootFileName_g4s, Double_t distanceFromTheAxisOfTheShower);
   void readEventFormRootFile_newFormat( TString inRootFileName_g4s, TString inTrkDataFile_g4s, Double_t particleMomentum);
