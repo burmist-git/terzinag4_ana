@@ -3,13 +3,15 @@
 #include "CameraPlaneHist.hh"
 #include "sim_trk_info_str.hh"
 
+//package test
 #include "libtempl.h"
+
 //wfsim
-//#include "wfSim.hh"
-//#include "wfSimConfStr.hh"
-//#include "sipmAvalancheTree.hh"
-//#include "genSiPMwf.hh"
-//#include "wfParametrisationStr.hh"
+#include "wfSim.hh"
+#include "wfSimConfStr.hh"
+#include "sipmAvalancheTree.hh"
+#include "genSiPMwf.hh"
+#include "wfParametrisationStr.hh"
 
 //root
 #include <TH2.h>
@@ -44,6 +46,8 @@ terzina::terzina()
 {
   cout<<"terzina::terzina()"<<endl;
   templ::test();
+  wfSim *wf = new wfSim(); 
+  delete wf;
 }
 
 terzina::terzina(TString fileList) : terzinabase(fileList)
