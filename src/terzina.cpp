@@ -484,6 +484,11 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   TH1D *h1_nPhot = new TH1D("h1_nPhot","nPhot",400,0,400);
   TH1D *h1_npe = new TH1D("h1_npe","n p.e.",401,-0.5,400.5);
   //
+  TH1D *h1_wf_tm = new TH1D("h1_wf_tm","h1_wf_tm",400,0.0,2000);
+  TH1D *h1_wf_am = new TH1D("h1_wf_am","h1_wf_am",1001,-0.5,1000.5);
+  TH1D *h1_wf_sig_fwhm = new TH1D("h1_wf_sig_fwhm","h1_wf_sig_fwhm",500,0.0,500.0);
+  TH1D *h1_wf_sig_fwtm = new TH1D("h1_wf_sig_fwtm","h1_wf_sig_fwtm",500,0.0,2000.0);
+  //
   TH1D *h1_primPosX = new TH1D("h1_primPosX","primPosX",1000,-400,400);
   TH1D *h1_primPosY = new TH1D("h1_primPosY","primPosY",1000,-400,400);
   TH1D *h1_primPosZ = new TH1D("h1_primPosZ","primPosZ",1000,-400,400);
@@ -529,6 +534,9 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   TString gr_NameTitle = "gr_wf_sig_only_";
   //
   std::vector<TGraph*> wfSim_vec;
+  //
+  Double_t wf_tm, wf_am;
+  Double_t wf_sig_fwhm, wf_sig_fwtm;
   //
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
     //for (Long64_t jentry=0; jentry<1000;jentry++) {
@@ -591,19 +599,36 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
 	}
       }
       /////////////////
-      TGraph *gr_wf = new TGraph();
-      TGraph *gr_wf_sig = new TGraph();
-      TGraph *gr_wf_sig_only = new TGraph();
-      gr_NameTitle = "gr_wf_sig_only_";
-      gr_NameTitle += i_jentry;
-      gr_wf_sig_only->SetNameTitle(gr_NameTitle.Data(),gr_NameTitle.Data());
-      wf->gen_WF( gr_wf, gr_wf_sig, gr_wf_sig_only, npe,  _h1_timeHist);
-      wfSim_vec.push_back(gr_wf_sig_only);
+      if(npe>0){
+	TGraph *gr_wf = new TGraph();
+	TGraph *gr_wf_sig = new TGraph();
+	TGraph *gr_wf_sig_only = new TGraph();
+	gr_NameTitle = "gr_wf_sig_only_";
+	gr_NameTitle += i_jentry;
+	gr_wf_sig_only->SetNameTitle(gr_NameTitle.Data(),gr_NameTitle.Data());
+	wf->gen_WF( gr_wf, gr_wf_sig, gr_wf_sig_only, npe,  _h1_timeHist);
+	wfSim_vec.push_back(gr_wf_sig_only);
+	i_jentry++;
+	//
+	waveform *wfana = new waveform(gr_wf_sig_only);
+	wfana->GetMaximumTimeAmpl_FWHM_FWTM( wf_tm, wf_am, wf_sig_fwhm, wf_sig_fwtm);
+	//
+	h1_wf_tm->Fill(wf_tm);
+	h1_wf_am->Fill(wf_am);
+	h1_wf_sig_fwhm->Fill(wf_sig_fwhm);
+	h1_wf_sig_fwtm->Fill(wf_sig_fwtm);
+	//
+	//cout<<"wf_tm       "<<wf_tm<<endl
+	//   <<"wf_am       "<<wf_am<<endl
+	//   <<"wf_sig_fwhm "<<wf_sig_fwhm<<endl
+	//   <<"wf_sig_fwtm "<<wf_sig_fwtm<<endl;
+	//
+	delete wfana;
+      }
       //wfSim *wf = new wfSim();
       //delete wf;
       /////////////////
       h1_npe->Fill(npe);
-      i_jentry++;
       //delete gr_wf_sig_only;
     }
   }
@@ -641,6 +666,10 @@ void terzina::showerSim(TString inRootFileWithShower, TString inDatFileShower, D
   cp_hist->Write();
   //
   h1_npe->Write();
+  h1_wf_tm->Write();
+  h1_wf_am->Write();
+  h1_wf_sig_fwhm->Write();
+  h1_wf_sig_fwtm->Write();
   //
   _h1_distance->Write();
   _h1_wavelength->Write();

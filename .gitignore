@@ -42,3 +42,5 @@ merg_hist.root
 merg_hist_1000PeV.root
 merg_hist_100PeV.root
 merg_hist_10PeV.root
+duhs.info
+sbatch.info

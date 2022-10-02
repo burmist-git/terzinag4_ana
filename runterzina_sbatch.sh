@@ -19,9 +19,41 @@ then
     printHelp
 else
     if [ "$1" = "-d" ]; then
+	#for i in $(seq 0 $n_jobs); do
+        #    jobID=`printf "%05d" $i`
+	#    sbatch $anaHomeDir/runterzina_job.sh -d $jobID
+	#done
 	for i in $(seq 0 $n_jobs); do
             jobID=`printf "%05d" $i`
-	    sbatch $anaHomeDir/runterzina_job.sh -d $jobID
+	    sbatch $anaHomeDir/runterzina_job_10PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_35PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_70PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_100PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_350PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_700PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_1000PeV.sh -d $jobID
+	done
+	for i in $(seq 0 $n_jobs); do
+            jobID=`printf "%05d" $i`
+	    sbatch $anaHomeDir/runterzina_job_3000PeV.sh -d $jobID
 	done
     elif [ "$1" = "-bkg" ]; then
         inRootFileListG4_dir="../root_fileLists_bkg/"
