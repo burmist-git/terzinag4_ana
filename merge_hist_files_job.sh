@@ -17,6 +17,7 @@ function printHelp {
     echo " [1]       : (0) execution ID number"
     echo " [2]       : output root file"
     echo " [3]       : Ekin of the trk in PeV (integer)"
+    echo " [0] -t    : test"
     echo " [0] -h    : print help"
 }
 
@@ -33,6 +34,8 @@ else
 	else
             printHelp
 	fi
+    elif [ "$1" = "-t" ]; then
+	./merge_hist_files 0 merge_hist_files_test_3000PeV.root 3000
     elif [ "$1" = "-h" ]; then
         printHelp
     else

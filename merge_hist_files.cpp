@@ -32,7 +32,10 @@ void readDatTrkFile(TString fileName, Double_t &theta, Double_t &phi,
 		    Double_t &x_int, Double_t &y_int, Double_t &z_int,
 		    Double_t &xe0, Double_t &ye0, Double_t &ze0,
 		    Double_t &distToEarth, Double_t &distToTerzina, Double_t &angleTrzinaTrk, Double_t &nphotons_per_m2);
-void readHistG4File(TString hist_fileName, Double_t &nPhot_mean, Double_t &npe_mean, Int_t npe_th[]);
+//void readHistG4File(TString hist_fileName, Double_t &nPhot_mean, Double_t &npe_mean, Int_t npe_th[]);
+void readHistG4File(TString hist_fileName,
+		    Double_t &nPhot_mean, Double_t &npe_mean, Int_t npe_th[],
+		    Double_t &wf_tm_mean, Double_t &wf_am_mean, Double_t &wf_sig_fwhm_mean, Double_t &wf_sig_fwtm_mean, Int_t wf_am_th[]);
 
 int main(int argc, char *argv[]){
   if(argc == 4 && atoi(argv[1])==0){
@@ -59,7 +62,13 @@ int main(int argc, char *argv[]){
     //
     Double_t nPhot_mean;
     Double_t npe_mean;
-    Int_t npe_th[10];
+    Int_t npe_th[20];
+    //
+    Double_t wf_tm_mean;
+    Double_t wf_am_mean;
+    Double_t wf_sig_fwhm_mean;
+    Double_t wf_sig_fwtm_mean;
+    Int_t wf_am_th[20];
     //
     TFile *hfile = new TFile(outputRootFile.Data(), "RECREATE", "cosmique proton generator", 1);
     if (hfile->IsZombie()) {
@@ -96,7 +105,13 @@ int main(int argc, char *argv[]){
     //
     tree->Branch("nPhot_mean",&nPhot_mean, "nPhot_mean/D");
     tree->Branch("npe_mean",&npe_mean, "npe_mean/D");
-    tree->Branch("npe_th", npe_th, "npe_th[10]/I");
+    tree->Branch("npe_th", npe_th, "npe_th[20]/I");
+    //
+    tree->Branch("wf_tm_mean",&wf_tm_mean, "wf_tm_mean/D");
+    tree->Branch("wf_am_mean",&wf_am_mean, "wf_am_mean/D");
+    tree->Branch("wf_sig_fwhm_mean",&wf_sig_fwhm_mean, "wf_sig_fwhm_mean/D");
+    tree->Branch("wf_sig_fwtm_mean",&wf_sig_fwtm_mean, "wf_sig_fwtm_mean/D");
+    tree->Branch("wf_am_th", wf_am_th, "wf_am_th[20]/I");
     //  
     TString  fileName;
     TString  hist_fileName;
@@ -113,7 +128,9 @@ int main(int argc, char *argv[]){
       if(file_exists_test(fileName)){
 	readDatTrkFile(fileName.Data(), theta, phi, x_int, y_int, z_int, xe0, ye0, ze0, distToEarth, distToTerzina, angleTrzinaTrk, nphotons_per_m2);
 	if(file_exists_test(hist_fileName)){
-	  readHistG4File(hist_fileName.Data(), nPhot_mean, npe_mean, npe_th);
+	  readHistG4File(hist_fileName.Data(),
+			 nPhot_mean, npe_mean, npe_th,
+			 wf_tm_mean, wf_am_mean, wf_sig_fwhm_mean, wf_sig_fwtm_mean, wf_am_th);
 	  //cout<<fileName<<endl
 	  //  <<hist_fileName<<endl
 	  //   <<nphotons_per_m2<<endl;
@@ -236,22 +253,36 @@ void readDatTrkFile(TString fileName, Double_t &theta, Double_t &phi,
   }
 }
 
-void readHistG4File(TString hist_fileName, Double_t &nPhot_mean, Double_t &npe_mean, Int_t npe_th[]){
+void readHistG4File(TString hist_fileName,
+		    Double_t &nPhot_mean, Double_t &npe_mean, Int_t npe_th[],
+		    Double_t &wf_tm_mean, Double_t &wf_am_mean, Double_t &wf_sig_fwhm_mean, Double_t &wf_sig_fwtm_mean, Int_t wf_am_th[]){
   //
   nPhot_mean = 0.0;
   npe_mean = 0.0;
-  for(Int_t i = 0;i<=10;i++)
+  for(Int_t i = 0;i<=20;i++)
     npe_th[i] = 0;
   TFile *f1 = new TFile(hist_fileName.Data());
   //
   TH1D *h1_1 = (TH1D*)f1->Get("h1_nPhot");
   TH1D *h1_2 = (TH1D*)f1->Get("h1_npe");
+
+  TH1D *h1_3 = (TH1D*)f1->Get("h1_wf_tm");
+  TH1D *h1_4 = (TH1D*)f1->Get("h1_wf_am");
+  TH1D *h1_5 = (TH1D*)f1->Get("h1_wf_sig_fwhm");
+  TH1D *h1_6 = (TH1D*)f1->Get("h1_wf_sig_fwtm");
   //
   nPhot_mean = h1_1->GetMean();
   npe_mean = h1_2->GetMean();
+  wf_tm_mean = h1_3->GetMean();
+  wf_am_mean = h1_4->GetMean();
+  wf_sig_fwhm_mean = h1_5->GetMean();
+  wf_sig_fwtm_mean = h1_6->GetMean();
   //
-  for(Int_t i = 0;i<=10;i++)
+  for(Int_t i = 0;i<=20;i++)
     npe_th[i] = h1_2->Integral(h1_2->FindBin(i+1),h1_2->GetEntries());
+  //
+  for(Int_t i = 0;i<=20;i++)
+    wf_am_th[i] = h1_4->Integral(h1_4->FindBin(i+1),h1_4->GetEntries());
+  //
   f1->Close();
 }
-
