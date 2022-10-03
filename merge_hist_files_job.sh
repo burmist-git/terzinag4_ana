@@ -5,7 +5,7 @@
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 1
 #SBATCH --partition public-cpu
-#SBATCH --time 0-01:00:00
+#SBATCH --time 0-05:00:00
 
 source /home/users/b/burmistr/terzina_photon_propagation/setupEnv.sh -d
 
