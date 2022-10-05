@@ -203,6 +203,11 @@ void mgranabase::Init(TTree *tree){
   fChain->SetBranchAddress("nPhot_mean", &nPhot_mean, &b_nPhot_mean);
   fChain->SetBranchAddress("npe_mean", &npe_mean, &b_npe_mean);
   fChain->SetBranchAddress("npe_th", npe_th, &b_npe_th);
+  fChain->SetBranchAddress("wf_tm_mean", &wf_tm_mean, &b_wf_tm_mean);
+  fChain->SetBranchAddress("wf_am_mean", &wf_am_mean, &b_wf_am_mean);
+  fChain->SetBranchAddress("wf_sig_fwhm_mean", &wf_sig_fwhm_mean, &b_wf_sig_fwhm_mean);
+  fChain->SetBranchAddress("wf_sig_fwtm_mean", &wf_sig_fwtm_mean, &b_wf_sig_fwtm_mean);
+  fChain->SetBranchAddress("wf_am_th", wf_am_th, &b_wf_am_th);
   //---------------------------------------------------
   Notify();
 }

@@ -23,40 +23,16 @@ Double_t eff_Fit_func(Double_t *x, Double_t *par){
   return k*x[0] + b;
 }
 
-Int_t plots_merge_hist_files(){
-  const Int_t n = 8;
+Int_t plots_merge_hist_files_wf_ana(){
+  const Int_t n = 6;
   TString fileNarr[n];
   
-  /*
-  fileNarr[0]="./merg_hist/hist_merg_hist_10PeV.root";
-  fileNarr[1]="./merg_hist/hist_merg_hist_35PeV.root";
-  fileNarr[2]="./merg_hist/hist_merg_hist_70PeV.root";
-  fileNarr[3]="./merg_hist/hist_merg_hist_100PeV.root";
-  fileNarr[4]="./merg_hist/hist_merg_hist_350PeV.root";
-  fileNarr[5]="./merg_hist/hist_merg_hist_700PeV.root";
-  fileNarr[6]="./merg_hist/hist_merg_hist_1000PeV.root";
-  fileNarr[7]="./merg_hist/hist_merg_hist_3000PeV.root";
-  */  
-
-  fileNarr[0]="./merg_hist_01/hist_merg_hist_10PeV.root";
-  fileNarr[1]="./merg_hist_01/hist_merg_hist_35PeV.root";
-  fileNarr[2]="./merg_hist_01/hist_merg_hist_70PeV.root";
-  fileNarr[3]="./merg_hist_01/hist_merg_hist_100PeV.root";
-  fileNarr[4]="./merg_hist_01/hist_merg_hist_350PeV.root";
-  fileNarr[5]="./merg_hist_01/hist_merg_hist_700PeV.root";
-  fileNarr[6]="./merg_hist_01/hist_merg_hist_1000PeV.root";
-  fileNarr[7]="./merg_hist_01/hist_merg_hist_3000PeV.root";
-
-  /*
-  fileNarr[0]="./merg_hist_01/hist_merg_hist_10PeV.root";
-  fileNarr[1]="./merg_hist_01/hist_merg_hist_35PeV.root";
-  fileNarr[2]="./merg_hist/hist_merg_hist_70PeV.root";
-  fileNarr[3]="./merg_hist/hist_merg_hist_100PeV.root";
-  fileNarr[4]="./merg_hist/hist_merg_hist_350PeV.root";
-  fileNarr[5]="./merg_hist/hist_merg_hist_700PeV.root";
-  fileNarr[6]="./merg_hist/hist_merg_hist_1000PeV.root";
-  fileNarr[7]="./merg_hist/hist_merg_hist_3000PeV.root";
-  */
+  fileNarr[0]="./merg_hist/hist_merg_hist_70PeV.root";
+  fileNarr[1]="./merg_hist/hist_merg_hist_100PeV.root";
+  fileNarr[2]="./merg_hist/hist_merg_hist_350PeV.root";
+  fileNarr[3]="./merg_hist/hist_merg_hist_700PeV.root";
+  fileNarr[4]="./merg_hist/hist_merg_hist_1000PeV.root";
+  fileNarr[5]="./merg_hist/hist_merg_hist_3000PeV.root";
   
   //  
   //
@@ -67,7 +43,7 @@ Int_t plots_merge_hist_files(){
   TH1D *h1_distToEarth_cut_tot = new TH1D("h1_distToEarth_cut_tot","distToEarth cut tot",100,0.0,50.0);
   TH1D *h1_distToTerzina_cut[n];
   TH1D *h1_distToTerzina_cut_tot = new TH1D("h1_distToTerzina_cut_tot","distToTerzina cut tot",80,0.0,40.0);
-  for(Int_t i = 0;i<8;i++){
+  for(Int_t i = 0;i<n;i++){
    f1[i] = new TFile(fileNarr[i].Data());
    h1[i] = (TH1D*)f1[i]->Get("h1_npe_th");
    h1_distToEarth_cut[i] = (TH1D*)f1[i]->Get("h1_distToEarth_cut");
@@ -138,14 +114,6 @@ Int_t plots_merge_hist_files(){
   gr1[5]->SetMarkerStyle(20);
   gr1[5]->SetLineColor(kRed);
   gr1[5]->SetMarkerColor(kRed);
-  //
-  gr1[6]->SetMarkerStyle(20);
-  gr1[6]->SetLineColor(kBlue);
-  gr1[6]->SetMarkerColor(kBlue);
-  //
-  gr1[7]->SetMarkerStyle(20);
-  gr1[7]->SetLineColor(kGreen+2);
-  gr1[7]->SetMarkerColor(kGreen+2);
 
   TMultiGraph *mg = new TMultiGraph();
   for(Int_t i = 0;i<n;i++)
@@ -161,14 +129,12 @@ Int_t plots_merge_hist_files(){
   mg->GetYaxis()->SetTitle("efficiency");
   //
   TLegend *leg = new TLegend(0.6,0.6,0.9,0.9,"","brNDC");
-  leg->AddEntry(gr1[0], "10   PeV", "pl");
-  leg->AddEntry(gr1[1], "35   PeV", "pl");
-  leg->AddEntry(gr1[2], "70   PeV", "pl");
-  leg->AddEntry(gr1[3], "100  PeV", "pl");
-  leg->AddEntry(gr1[4], "350  PeV", "pl");
-  leg->AddEntry(gr1[5], "700  PeV", "pl");
-  leg->AddEntry(gr1[6], "1000 PeV", "pl");
-  leg->AddEntry(gr1[7], "3000 PeV", "pl");
+  leg->AddEntry(gr1[0], "70   PeV", "pl");
+  leg->AddEntry(gr1[1], "100  PeV", "pl");
+  leg->AddEntry(gr1[2], "350  PeV", "pl");
+  leg->AddEntry(gr1[3], "700  PeV", "pl");
+  leg->AddEntry(gr1[4], "1000 PeV", "pl");
+  leg->AddEntry(gr1[5], "3000 PeV", "pl");
   leg->Draw();
   //
   //
@@ -193,16 +159,6 @@ Int_t plots_merge_hist_files(){
   gr_eff_vs_e->SetLineColor(kBlack);
   gr_eff_vs_e->SetLineWidth(3.0);
   gr_eff_vs_e->SetMarkerColor(kBlack);
-  //
-  pointID = gr_eff_vs_e->GetN();
-  gr_eff_vs_e->SetPoint(pointID,10,1.0e-9);
-  //gr_eff_vs_e->SetPointError(pointID,0.0,1.0e-9/10.0);
-  gr_eff_vs_e->SetPointError(pointID,0.0,0.0);
-  //
-  pointID = gr_eff_vs_e->GetN();
-  gr_eff_vs_e->SetPoint(pointID,35,h1[1]->GetBinContent(8));
-  //gr_eff_vs_e->SetPointError(pointID,0.0,h1[1]->GetBinContent(8)/3.0);
-  gr_eff_vs_e->SetPointError(pointID,0.0,0.0);
   //
   pointID = gr_eff_vs_e->GetN();
   gr_eff_vs_e->SetPoint(pointID,70,h1[2]->GetBinContent(8));
@@ -267,7 +223,7 @@ Int_t plots_merge_hist_files(){
   */
   
   ///////////////////
-  Double_t e_min = 10;
+  Double_t e_min = 75;
   Double_t e_max = 3000;
   Double_t loge_min = TMath::Log10(e_min);
   Double_t loge_max = TMath::Log10(e_max);
@@ -290,7 +246,7 @@ Int_t plots_merge_hist_files(){
     gr_eff_vs_e_extrapolated->SetPoint(gr_eff_vs_e_extrapolated->GetN(),el,gr_eff_vs_e->Eval(el));
   }
   //
-  e_min = 10;
+  e_min = 75;
   e_max = 2999;
   nn = 30;
   loge_min = TMath::Log10(e_min);
@@ -435,38 +391,30 @@ Int_t plots_merge_hist_files(){
     //val = h1_distToEarth_cut_tot->GetBinContent(ii);
     //
     val = 0.0;
-    //10
-    ee_in_pev = 10;
-    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val = h1_distToEarth_cut[0]->GetBinContent(ii)*ww;
-    //35
-    ee_in_pev = 35;
-    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[1]->GetBinContent(ii)*ww;
     //70
     ee_in_pev = 70;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[2]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[0]->GetBinContent(ii)*ww;
     //100
     ee_in_pev = 100;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[3]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[1]->GetBinContent(ii)*ww;
     //350
     ee_in_pev = 350;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[4]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[2]->GetBinContent(ii)*ww;
     //700
     ee_in_pev = 700;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[5]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[3]->GetBinContent(ii)*ww;
     //1000
     ee_in_pev = 1000;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[6]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[4]->GetBinContent(ii)*ww;
     //3000
     ee_in_pev = 3000;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToEarth_cut[7]->GetBinContent(ii)*ww;
+    val += h1_distToEarth_cut[5]->GetBinContent(ii)*ww;
     //
     h1_distToEarth_cut_tot->SetBinContent(ii,val);
   }
@@ -496,38 +444,30 @@ Int_t plots_merge_hist_files(){
     //val = h1_distToEarth_cut_tot->GetBinContent(ii);
     //
     val = 0.0;
-    //10
-    ee_in_pev = 10;
-    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val = h1_distToTerzina_cut[0]->GetBinContent(ii)*ww;
-    //35
-    ee_in_pev = 35;
-    ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[1]->GetBinContent(ii)*ww;
     //70
     ee_in_pev = 70;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[2]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[0]->GetBinContent(ii)*ww;
     //100
     ee_in_pev = 100;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[3]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[1]->GetBinContent(ii)*ww;
     //350
     ee_in_pev = 350;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[4]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[2]->GetBinContent(ii)*ww;
     //700
     ee_in_pev = 700;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[5]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[3]->GetBinContent(ii)*ww;
     //1000
     ee_in_pev = 1000;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[6]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[4]->GetBinContent(ii)*ww;
     //1000
     ee_in_pev = 3000;
     ww = h1_particle_per_year_eff->GetBinContent(h1_particle_per_year_eff->FindBin(ee_in_pev*1.0e+6));
-    val += h1_distToTerzina_cut[7]->GetBinContent(ii)*ww;
+    val += h1_distToTerzina_cut[5]->GetBinContent(ii)*ww;
     //
     h1_distToTerzina_cut_tot->SetBinContent(ii,val);
   }

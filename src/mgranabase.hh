@@ -47,13 +47,19 @@ protected :
   Double_t        nphotons_per_m2;
   Double_t        nPhot_mean;
   Double_t        npe_mean;
-  Int_t           npe_th[10];
+  Int_t           npe_th[20];
+  Double_t        wf_tm_mean;
+  Double_t        wf_am_mean;
+  Double_t        wf_sig_fwhm_mean;
+  Double_t        wf_sig_fwtm_mean;
+  Int_t           wf_am_th[20];
+
   //---------------------------------------------------
   // ADD HERE :
   //Tree name
   //const TString treeName = "arich";
   const TString treeName = "T";
-  static const Int_t nChannels = 10;
+  static const Int_t nChannels = 20;
   //---------------------------------------------------
   
   // List of branches
@@ -76,6 +82,11 @@ protected :
   TBranch        *b_nPhot_mean;   //!
   TBranch        *b_npe_mean;   //!
   TBranch        *b_npe_th;   //!
+  TBranch        *b_wf_tm_mean;   //!
+  TBranch        *b_wf_am_mean;   //!
+  TBranch        *b_wf_sig_fwhm_mean;   //!
+  TBranch        *b_wf_sig_fwtm_mean;   //!
+  TBranch        *b_wf_am_th;   //!
   //---------------------------------------------------
   void tGraphInit(TGraph *gr[nChannels], TString grName, TString grTitle);
   void h1D1Init(TH1D *h1D1[nChannels],TString h1name, TString h1Title,
